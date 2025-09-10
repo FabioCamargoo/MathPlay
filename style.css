@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    background-image: url('image/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.MathPlayLogo {
+    margin-bottom: 90px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.square-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.squares-row {
+    display: flex;
+    gap: 20px;
+}
+
+.square-container{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 50px;
+}
+
+.square{
+     background: transparent;
+    border-radius: 10px;
+    box-shadow: 0 2px 8 px rgba(255,255, 255,0.);
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-size: 1.2rem;
+}
+
+square.active{
+    transform: scale(0.95)
+}
+
+.square-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    pointer-events: none;
+}
