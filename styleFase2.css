@@ -6,7 +6,7 @@
 }
 
 body {
-    background-image: url('image/bgFase1.jpg');
+    background-image: url('image/fase2.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -19,21 +19,13 @@ body {
     align-items: center;
 }
 
-.bgFase1 {
+.fase2 {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 70vh; 
 }
-
-.quadroNegro img {
-    background: transparent;
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-}
-
 
 .buttonVoltar {
     position: relative;
@@ -49,15 +41,6 @@ body {
     overflow: hidden;
 
 }
-
-.buttonVoltar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-    display: block;
-}
-
 .square-label {
     position: absolute;
     left: 50%;
@@ -69,6 +52,13 @@ body {
     pointer-events: none;
 }
 
+.buttonVoltar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    display: block;
+}
 .voltar-container {
     position: fixed;
     right: 40px;    
@@ -77,27 +67,5 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-}
-
-.color-picker {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 18px;
-}
-
-.color-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    cursor: pointer;
-    outline: none;
-    transition: border 0.2s;
-}
-
-.color-btn.selected,
-.color-btn:focus {
-    border: 2px solid #fdfdfd;
 }
 

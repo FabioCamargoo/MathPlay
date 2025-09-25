@@ -15,8 +15,10 @@
     </div>
 
     <div class="bgFase1">
-        <div class="quadroNegro">
+        <div class="quadroNegro" style="position: relative; overflow: hidden;">
             <img src="image/quadroNegroFase1.png" alt="">
+            <canvas id="drawCanvas" width="1182" height="691"
+                style="position:absolute; left:50px; top:40px; pointer-events:auto;"></canvas>
         </div>
     </div>
 
@@ -26,6 +28,57 @@
             <span class="square-label">Tela inicial</span>
         </button>
     </div>
-</body>
 
+    <div class="color-picker">
+        <button class="color-btn" data-color="#222" style="background:#dddddd"></button>
+        <button class="color-btn" data-color="#e74c3c" style="background:#e74c3c"></button>
+        <button class="color-btn" data-color="#3498db" style="background:#3498db"></button>
+        <button class="color-btn" data-color="#27ae60" style="background:#27ae60"></button>
+    </div>
+
+    <script>
+const canvas = document.getElementById('drawCanvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+let brushColor = "#dddddd";
+
+// Color picker logic
+const colorBtns = document.querySelectorAll('.color-btn');
+colorBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        brushColor = this.getAttribute('data-color');
+        colorBtns.forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+    });
+});
+// Set default selected
+colorBtns[0].classList.add('selected');
+
+canvas.addEventListener('mousedown', (e) => {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX, e.offsetY);
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (drawing) {
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.strokeStyle = brushColor;
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.stroke();
+    }
+});
+
+canvas.addEventListener('mouseup', () => {
+    drawing = false;
+    ctx.closePath();
+});
+
+canvas.addEventListener('mouseleave', () => {
+    drawing = false;
+    ctx.closePath();
+});
+</script>
+</body>
 </html>

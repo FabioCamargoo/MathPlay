@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Pintar com Mouse no Canvas</title>
+<style>
+  body { font-family: sans-serif; text-align: center; margin: 20px; }
+  #tools { margin-bottom: 10px; }
+  canvas { border: 1px solid #000; border-radius: 8px; cursor: crosshair; }
+</style>
+</head>
+<body>
+
+<h2>Exemplo de Pintura com Mouse</h2>
+
+<div id="tools">
+  <label>Cor: <input type="color" id="colorPicker" value="#ff0000"></label>
+  <label>Tamanho: <input type="range" id="brushSize" min="1" max="50" value="5"></label>
+  <button id="clearBtn">Limpar</button>
+</div>
+
+<canvas id="paintCanvas" width="600" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById("paintCanvas");
+const ctx = canvas.getContext("2d");
+
+let painting = false;
+
+const colorPicker = document.getElementById("colorPicker");
+const brushSize = document.getElementById("brushSize");
+const clearBtn = document.getElementById("clearBtn");
+
+function startPosition(e) {
+  painting = true;
+  draw(e); // desenha ponto inicial
+}
+function endPosition() {
+  painting = false;
+  ctx.beginPath(); // evita linhas ligadas
+}
+function draw(e) {
+  if (!painting) return;
+
+  ctx.lineWidth = brushSize.value;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = colorPicker.value;
+
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+}
+
+// Eventos do mouse
+canvas.addEventListener("mousedown", startPosition);
+canvas.addEventListener("mouseup", endPosition);
+canvas.addEventListener("mousemove", draw);
+
+// Botão limpar
+clearBtn.addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+</script>
+
+</body>
+</html>
