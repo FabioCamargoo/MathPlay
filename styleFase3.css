@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-image: url('image/fase3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.fase2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 70vh; 
+}
+
+.buttonVoltar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 0;
+    overflow: hidden;
+
+}
+.square-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #222;
+    font-weight: bold;
+    font-size: 1.2rem;
+    pointer-events: none;
+}
+
+.buttonVoltar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    display: block;
+}
+.voltar-container {
+    position: fixed;
+    right: 40px;    
+    bottom: 40px;   
+    z-index: 10;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

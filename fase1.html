@@ -34,15 +34,60 @@
         <button class="color-btn" data-color="#e74c3c" style="background:#e74c3c"></button>
         <button class="color-btn" data-color="#3498db" style="background:#3498db"></button>
         <button class="color-btn" data-color="#27ae60" style="background:#27ae60"></button>
+        <button class="color-btn" data-color="#f1c40f" style="background:#f1c40f"></button>
+        <button class="color-btn" data-color="#9b59b6" style="background:#9b59b6"></button>
+        <button class="color-btn" data-color="#ff9800" style="background:#ff9800"></button>
+        <button class="color-btn" data-color="#00bcd4" style="background:#00bcd4"></button>
     </div>
 
     <script>
 const canvas = document.getElementById('drawCanvas');
 const ctx = canvas.getContext('2d');
-let drawing = false;
 let brushColor = "#dddddd";
 
-// Color picker logic
+// Formas geométricas com posição e cor
+const shapes = [
+    { type: 'circle', x: 200, y: 200, r: 60, color: "#fff" },
+    { type: 'square', x: 400, y: 150, size: 120, color: "#fff" },
+    { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" }
+];
+
+// Função para desenhar todas as formas
+function drawShapes() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    shapes.forEach(shape => {
+        if (shape.type === 'circle') {
+            ctx.beginPath();
+            ctx.arc(shape.x, shape.y, shape.r, 0, 2 * Math.PI);
+            ctx.fillStyle = shape.color;
+            ctx.fill();
+            ctx.strokeStyle = "#222";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        } else if (shape.type === 'square') {
+            ctx.beginPath();
+            ctx.rect(shape.x, shape.y, shape.size, shape.size);
+            ctx.fillStyle = shape.color;
+            ctx.fill();
+            ctx.strokeStyle = "#222";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        } else if (shape.type === 'triangle') {
+            ctx.beginPath();
+            ctx.moveTo(shape.x, shape.y);
+            ctx.lineTo(shape.x + shape.size, shape.y);
+            ctx.lineTo(shape.x + shape.size / 2, shape.y - shape.size);
+            ctx.closePath();
+            ctx.fillStyle = shape.color;
+            ctx.fill();
+            ctx.strokeStyle = "#222";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+    });
+}
+
+// Lógica do seletor de cores
 const colorBtns = document.querySelectorAll('.color-btn');
 colorBtns.forEach(btn => {
     btn.addEventListener('click', function() {
@@ -51,34 +96,51 @@ colorBtns.forEach(btn => {
         this.classList.add('selected');
     });
 });
-// Set default selected
 colorBtns[0].classList.add('selected');
 
-canvas.addEventListener('mousedown', (e) => {
-    drawing = true;
-    ctx.beginPath();
-    ctx.moveTo(e.offsetX, e.offsetY);
+// Detecta clique em uma forma e pinta com a cor selecionada
+canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    shapes.forEach(shape => {
+        if (shape.type === 'circle') {
+            const dist = Math.sqrt((x - shape.x) ** 2 + (y - shape.y) ** 2);
+            if (dist <= shape.r) {
+                shape.color = brushColor;
+            }
+        } else if (shape.type === 'square') {
+            if (
+                x >= shape.x &&
+                x <= shape.x + shape.size &&
+                y >= shape.y &&
+                y <= shape.y + shape.size
+            ) {
+                shape.color = brushColor;
+            }
+        } else if (shape.type === 'triangle') {
+            // Algoritmo de ponto dentro do triângulo
+            const x1 = shape.x, y1 = shape.y;
+            const x2 = shape.x + shape.size, y2 = shape.y;
+            const x3 = shape.x + shape.size / 2, y3 = shape.y - shape.size;
+            function area(x1, y1, x2, y2, x3, y3) {
+                return Math.abs((x1*(y2-y3) + x2*(y3-y1) + x3*(y1-y2))/2.0);
+            }
+            const A = area(x1, y1, x2, y2, x3, y3);
+            const A1 = area(x, y, x2, y2, x3, y3);
+            const A2 = area(x1, y1, x, y, x3, y3);
+            const A3 = area(x1, y1, x2, y2, x, y);
+            if (Math.abs(A - (A1 + A2 + A3)) < 0.5) {
+                shape.color = brushColor;
+            }
+        }
+    });
+    drawShapes();
 });
 
-canvas.addEventListener('mousemove', (e) => {
-    if (drawing) {
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.strokeStyle = brushColor;
-        ctx.lineWidth = 3;
-        ctx.lineCap = "round";
-        ctx.stroke();
-    }
-});
-
-canvas.addEventListener('mouseup', () => {
-    drawing = false;
-    ctx.closePath();
-});
-
-canvas.addEventListener('mouseleave', () => {
-    drawing = false;
-    ctx.closePath();
-});
+// Inicializa as formas
+drawShapes();
 </script>
 </body>
 </html>
