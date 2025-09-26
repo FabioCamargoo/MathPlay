@@ -78,3 +78,20 @@ square.active{
     transform: translate(-50%, -50%);
     pointer-events: none;
 }
+
+footer {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    z-index: 10;
+    background: transparent;
+}
+
+footer img {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}
