@@ -10,27 +10,29 @@
 <body>
     <link rel="stylesheet" href="styleFase1.css">
 
+    <div class="voltar-container">
+        <button class="buttonVoltar" onclick="window.location.href='index.html'">
+            <img class="imgVoltar" src="image/botao.png" alt="Voltar">
+            <span class="square-label">Tela inicial</span>
+        </button>
+    </div>
+
     <div class="tituloFase1">
         <img src="image/tituloFase1.png" alt="">
     </div>
 
     <div class="bgFase1">
         <div class="quadroNegro" style="position: relative; overflow: hidden;">
-            <img src="image/quadroNegroFase1.png" alt="">
-            <canvas id="drawCanvas" width="1182" height="691"
-                style="position:absolute; left:50px; top:40px; pointer-events:auto;"></canvas>
+            <img src="image/quadroNegroFase1.png" alt="" style="display:block; width:100%; height:auto;">
+            <!-- canvas posicionado sobre o quadroNegro -->
+            <canvas id="drawCanvas" width="1920" height="1080"
+                style="position:absolute; left:0; top:0; pointer-events:auto;"></canvas>
         </div>
     </div>
 
-    <div class="voltar-container">
-        <button class="buttonVoltar" onclick="window.location.href='index.html'">
-            <img class="imgVoltar" src="image/botao.png" alt="" srcset="">
-            <span class="square-label">Tela inicial</span>
-        </button>
-    </div>
-
+  
     <div class="color-picker">
-        <button class="color-btn" data-color="#222" style="background:#dddddd"></button>
+        <button class="color-btn" data-color="#222" style="background:#222"></button>
         <button class="color-btn" data-color="#e74c3c" style="background:#e74c3c"></button>
         <button class="color-btn" data-color="#3498db" style="background:#3498db"></button>
         <button class="color-btn" data-color="#27ae60" style="background:#27ae60"></button>
@@ -40,7 +42,7 @@
         <button class="color-btn" data-color="#00bcd4" style="background:#00bcd4"></button>
     </div>
     
-    <script src="scriptFase1.js"></script>
+    <script src="fase1script.js"></script>
 </body>
 
 </html>
