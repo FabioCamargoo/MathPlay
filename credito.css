@@ -70,9 +70,9 @@ square.active{
 
 .square-label {
     position: absolute;
-    color: #fff; /* alterado para branco */
+    color: #222;
     font-weight: bold;
-    font-size: 1.50rem;
+    font-size: 1rem;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -95,3 +95,91 @@ footer img {
     height: auto;
     object-fit: contain;
 }
+
+.team {
+    display: flex;
+    gap: 100px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    padding: 20px;
+}
+
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* imagens do mesmo tamanho e bem cortadas */
+.team img {
+    width: clamp(100px, 20vw, 160px);
+    height: clamp(100px, 20vw, 160px);
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.team-member figcaption {
+    margin-top: 6px;
+    font-size: 1.50rem; /* aumentado */
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+@media (max-width: 480px) {
+    .team {
+        gap: 10px;
+    }
+    .team img {
+        width: 100px;
+        height: 100px;
+    }
+    .team-member figcaption {
+        font-size: 1.1rem; /* ligeiro ajuste responsivo */
+    }
+}
+
+.voltar-container {
+    position: fixed;
+    left: 20px;    
+    bottom: 20px;
+    z-index: 30;
+}
+
+
+.buttonVoltar {
+    position: relative;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-block;
+}
+
+
+.buttonVoltar .imgVoltar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+
+.buttonVoltar .square-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
