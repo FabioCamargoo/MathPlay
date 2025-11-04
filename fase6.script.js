@@ -4,10 +4,9 @@ let brushColor = "#dddddd";
 
 // Formas geométricas com posição e cor
 const shapes = [
-    
-    { type: 'square', x: 400, y: 150, size: 350, color: "#fff" },
-    { type: 'triangle', x: 700, y: 250, size: 400, color: "#fff" },
-    { type: 'circle', x: 200, y: 200, r: 80, color: "#fff" }
+    { type: 'circle', x: 200, y: 200, r: 60, color: "#fff" },
+    { type: 'square', x: 400, y: 150, size: 120, color: "#fff" },
+    { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" }
 ];
 
 // Drag and drop variables
@@ -192,7 +191,7 @@ window.addEventListener('load', () => {
         defaultColor: '#dddddd',
         shapes: [
             { type: 'circle', x: 150, y: 140, r: 50, color: '#ffffff' },
-            { type: 'square', x: 320, y: 110, size: 180, color: '#ffffff' },
+            { type: 'square', x: 320, y: 110, size: 100, color: '#ffffff' },
             { type: 'triangle', x: 500, y: 180, size: 110, color: '#ffffff' }
         ]
     });

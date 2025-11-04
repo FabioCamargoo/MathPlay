@@ -5,9 +5,15 @@ let brushColor = "#dddddd";
 // Formas geométricas com posição e cor
 const shapes = [
     
-    { type: 'square', x: 400, y: 150, size: 350, color: "#fff" },
-    { type: 'triangle', x: 700, y: 250, size: 400, color: "#fff" },
-    { type: 'circle', x: 200, y: 200, r: 80, color: "#fff" }
+    { type: 'circle', x: 200, y: 200, r: 25, color: "#fff" },
+    // trocado square por rect (retângulo em pé)
+   
+    { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" },
+    // adicionados 3 círculos
+    { type: 'circle', x: 280, y: 320, r: 30, color: "#fff" },
+    { type: 'circle', x: 520, y: 320, r: 28, color: "#fff" },
+    { type: 'circle', x: 640, y: 120, r: 27, color: "#fff" },
+    { type: 'rect', x: 400, y: 120, width: 240, height: 120, color: "#fff" }
 ];
 
 // Drag and drop variables
@@ -27,9 +33,9 @@ function drawShapes() {
             ctx.strokeStyle = "#f5f5f5ff";
             ctx.lineWidth = 3;
             ctx.stroke();
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             ctx.beginPath();
-            ctx.rect(shape.x, shape.y, shape.size, shape.size);
+            ctx.rect(shape.x, shape.y, shape.width, shape.height);
             ctx.fillStyle = shape.color;
             ctx.fill();
             ctx.strokeStyle = "#f5f5f5ff";
@@ -59,7 +65,7 @@ colorBtns.forEach(btn => {
         this.classList.add('selected');
     });
 });
-colorBtns[0].classList.add('selected');
+if (colorBtns[0]) colorBtns[0].classList.add('selected');
 
 // Detecta clique em uma forma e pinta com a cor selecionada
 canvas.addEventListener('click', (e) => {
@@ -74,12 +80,12 @@ canvas.addEventListener('click', (e) => {
             if (dist <= shape.r) {
                 shape.color = brushColor;
             }
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             if (
                 x >= shape.x &&
-                x <= shape.x + shape.size &&
+                x <= shape.x + shape.width &&
                 y >= shape.y &&
-                y <= shape.y + shape.size
+                y <= shape.y + shape.height
             ) {
                 shape.color = brushColor;
             }
@@ -119,12 +125,12 @@ canvas.addEventListener('mousedown', (e) => {
                 offsetY = y - shape.y;
                 return;
             }
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             if (
                 x >= shape.x &&
-                x <= shape.x + shape.size &&
+                x <= shape.x + shape.width &&
                 y >= shape.y &&
-                y <= shape.y + shape.size
+                y <= shape.y + shape.height
             ) {
                 draggingShape = shape;
                 offsetX = x - shape.x;
@@ -162,7 +168,7 @@ canvas.addEventListener('mousemove', (e) => {
     if (draggingShape.type === 'circle') {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
-    } else if (draggingShape.type === 'square') {
+    } else if (draggingShape.type === 'rect') {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
     } else if (draggingShape.type === 'triangle') {
@@ -192,8 +198,13 @@ window.addEventListener('load', () => {
         defaultColor: '#dddddd',
         shapes: [
             { type: 'circle', x: 150, y: 140, r: 50, color: '#ffffff' },
-            { type: 'square', x: 320, y: 110, size: 180, color: '#ffffff' },
-            { type: 'triangle', x: 500, y: 180, size: 110, color: '#ffffff' }
+            // aqui também trocar para rect (retângulo em pé)
+            { type: 'rect', x: 320, y: 90, width: 120, height: 180, color: '#ffffff' },
+            { type: 'triangle', x: 500, y: 180, size: 110, color: '#ffffff' },
+            // replicar os 3 círculos também na inicialização do painter
+            { type: 'circle', x: 280, y: 320, r: 50, color: '#ffffff' },
+            { type: 'circle', x: 520, y: 320, r: 50, color: '#ffffff' },
+            { type: 'circle', x: 640, y: 120, r: 40, color: '#ffffff' }
         ]
     });
 });

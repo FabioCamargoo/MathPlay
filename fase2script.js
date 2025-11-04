@@ -4,9 +4,10 @@ let brushColor = "#dddddd";
 
 // Formas geométricas com posição e cor
 const shapes = [
-    { type: 'circle', x: 200, y: 200, r: 60, color: "#fff" },
-    { type: 'square', x: 400, y: 150, size: 120, color: "#fff" },
-    { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" }
+    { type: 'circle', x: 200, y: 200, r: 40, color: "#fff" },
+    // substituído square por rect (retângulo em pé)
+    { type: 'rect', x: 400, y: 110, width: 80, height: 300, color: "#fff" },
+    { type: 'triangle', x: 700, y: 250, size: 85,  color: "#fff" }
 ];
 
 // Drag and drop variables
@@ -26,9 +27,9 @@ function drawShapes() {
             ctx.strokeStyle = "#f5f5f5ff";
             ctx.lineWidth = 3;
             ctx.stroke();
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             ctx.beginPath();
-            ctx.rect(shape.x, shape.y, shape.size, shape.size);
+            ctx.rect(shape.x, shape.y, shape.width, shape.height);
             ctx.fillStyle = shape.color;
             ctx.fill();
             ctx.strokeStyle = "#f5f5f5ff";
@@ -36,9 +37,11 @@ function drawShapes() {
             ctx.stroke();
         } else if (shape.type === 'triangle') {
             ctx.beginPath();
+            // base: (x, y) -> (x + size, y)
+            // ponta invertida: vértice abaixo em (x + size/2, y + size)
             ctx.moveTo(shape.x, shape.y);
             ctx.lineTo(shape.x + shape.size, shape.y);
-            ctx.lineTo(shape.x + shape.size / 2, shape.y - shape.size);
+            ctx.lineTo(shape.x + shape.size / 2, shape.y + shape.size);
             ctx.closePath();
             ctx.fillStyle = shape.color;
             ctx.fill();
@@ -58,14 +61,14 @@ colorBtns.forEach(btn => {
         this.classList.add('selected');
     });
 });
-colorBtns[0].classList.add('selected');
+if (colorBtns[0]) colorBtns[0].classList.add('selected');
 
 // Detecta clique em uma forma e pinta com a cor selecionada
 canvas.addEventListener('click', (e) => {
     if (draggingShape) return; // Não pinta enquanto arrasta
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const rectCanvas = canvas.getBoundingClientRect();
+    const x = e.clientX - rectCanvas.left;
+    const y = e.clientY - rectCanvas.top;
 
     shapes.forEach(shape => {
         if (shape.type === 'circle') {
@@ -73,20 +76,20 @@ canvas.addEventListener('click', (e) => {
             if (dist <= shape.r) {
                 shape.color = brushColor;
             }
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             if (
                 x >= shape.x &&
-                x <= shape.x + shape.size &&
+                x <= shape.x + shape.width &&
                 y >= shape.y &&
-                y <= shape.y + shape.size
+                y <= shape.y + shape.height
             ) {
                 shape.color = brushColor;
             }
         } else if (shape.type === 'triangle') {
-            // Algoritmo de ponto dentro do triângulo
+            // Algoritmo de ponto dentro do triângulo (ponta para baixo)
             const x1 = shape.x, y1 = shape.y;
             const x2 = shape.x + shape.size, y2 = shape.y;
-            const x3 = shape.x + shape.size / 2, y3 = shape.y - shape.size;
+            const x3 = shape.x + shape.size / 2, y3 = shape.y + shape.size; // invertido
             function area(x1, y1, x2, y2, x3, y3) {
                 return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
             }
@@ -104,9 +107,9 @@ canvas.addEventListener('click', (e) => {
 
 // Drag and drop handlers
 canvas.addEventListener('mousedown', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const rectCanvas = canvas.getBoundingClientRect();
+    const x = e.clientX - rectCanvas.left;
+    const y = e.clientY - rectCanvas.top;
 
     for (let i = shapes.length - 1; i >= 0; i--) { // Prioriza forma superior
         const shape = shapes[i];
@@ -118,12 +121,12 @@ canvas.addEventListener('mousedown', (e) => {
                 offsetY = y - shape.y;
                 return;
             }
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             if (
                 x >= shape.x &&
-                x <= shape.x + shape.size &&
+                x <= shape.x + shape.width &&
                 y >= shape.y &&
-                y <= shape.y + shape.size
+                y <= shape.y + shape.height
             ) {
                 draggingShape = shape;
                 offsetX = x - shape.x;
@@ -133,7 +136,7 @@ canvas.addEventListener('mousedown', (e) => {
         } else if (shape.type === 'triangle') {
             const x1 = shape.x, y1 = shape.y;
             const x2 = shape.x + shape.size, y2 = shape.y;
-            const x3 = shape.x + shape.size / 2, y3 = shape.y - shape.size;
+            const x3 = shape.x + shape.size / 2, y3 = shape.y + shape.size; // invertido
             function area(x1, y1, x2, y2, x3, y3) {
                 return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
             }
@@ -143,7 +146,7 @@ canvas.addEventListener('mousedown', (e) => {
             const A3 = area(x1, y1, x2, y2, x, y);
             if (Math.abs(A - (A1 + A2 + A3)) < 0.5) {
                 draggingShape = shape;
-                // Para triângulo, calcula offset do ponto de arrasto para o vértice superior
+                // Para triângulo, calcula offset do ponto de arrasto para o vértice (use índice do vértice superior esquerdo)
                 offsetX = x - shape.x;
                 offsetY = y - shape.y;
                 return;
@@ -154,14 +157,14 @@ canvas.addEventListener('mousedown', (e) => {
 
 canvas.addEventListener('mousemove', (e) => {
     if (!draggingShape) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const rectCanvas = canvas.getBoundingClientRect();
+    const x = e.clientX - rectCanvas.left;
+    const y = e.clientY - rectCanvas.top;
 
     if (draggingShape.type === 'circle') {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
-    } else if (draggingShape.type === 'square') {
+    } else if (draggingShape.type === 'rect') {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
     } else if (draggingShape.type === 'triangle') {
@@ -182,24 +185,18 @@ canvas.addEventListener('mouseleave', () => {
 // Inicializa as formas
 drawShapes();
 
-// inicializa 3 formas (quadrado, triângulo, círculo) na fase 2
+// chamar a função genérica com as formas desta fase
 window.addEventListener('load', () => {
-    if (typeof initShapePainter !== 'function') {
-        console.error('drawShapes.js não encontrado. Inclua drawShapes.js antes deste script.');
-        return;
-    }
-
+    // certifique-se que exista <canvas id="drawCanvas"> no HTML e que drawShapes.js foi incluído antes deste script
     initShapePainter({
         canvasId: 'drawCanvas',
         colorBtnSelector: '.color-btn',
-        defaultColor: '#222',
+        defaultColor: '#dddddd',
         shapes: [
-            // quadrado (x,y = topo esquerdo)
-            { type: 'square', x: 120, y: 120, size: 160, color: '#ffffff' },
-            // triângulo (x,y = vértice superior)
-            { type: 'triangle', x: 360, y: 300, size: 160, color: '#ffffff' },
-            // círculo (x,y = centro)
-            { type: 'circle', x: 720, y: 180, r: 80, color: '#ffffff' }
+            { type: 'circle', x: 150, y: 140, r: 50, color: '#ffffff' },
+            // aqui também trocar para rect (retângulo em pé)
+            { type: 'rect', x: 320, y: 90, width: 80, height: 160, color: '#ffffff' },
+            { type: 'triangle', x: 500, y: 180, size: 110, color: '#ffffff' }
         ]
     });
 });
