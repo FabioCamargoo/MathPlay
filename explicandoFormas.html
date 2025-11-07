@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explicando Formas</title>
+    <link rel="stylesheet" href="explicandoFormas.css">
+</head>
+<body>
+    <main class="forms-page">
+        <h1 class="page-title">Formas</h1>
+
+        <!-- substitui o carrossel por uma grade de imagens com botão abaixo -->
+        <section class="forms-grid">
+            <figure class="form-item">
+                <img src="image/circuloForma.jpg" alt="Círculo">
+                <figcaption>Círculo</figcaption>
+                <button class="choose-btn" data-form="circulo">Selecionar</button>
+            </figure>
+
+            <figure class="form-item">
+                <img src="image/quadradoForma.jpg" alt="Quadrado">
+                <figcaption>Quadrado</figcaption>
+                <button class="choose-btn" data-form="quadrado">Selecionar</button>
+            </figure>
+
+            <figure class="form-item">
+                <img src="image/trianguloForma.jpg" alt="Triângulo">
+                <figcaption>Triângulo</figcaption>
+                <button class="choose-btn" data-form="triangulo">Selecionar</button>
+            </figure>
+
+            <figure class="form-item">
+                <img src="image/retanguloForma.jpg" alt="Retângulo">
+                <figcaption>Retângulo</figcaption>
+                <button class="choose-btn" data-form="retangulo">Selecionar</button>
+            </figure>
+
+            <figure class="form-item">
+                <img src="image/ovalForma.jpg" alt="Elipse">
+                <figcaption>Elipse</figcaption>
+                <button class="choose-btn" data-form="elipse">Selecionar</button>
+            </figure>
+
+            <figure class="form-item">
+                <img src="image/losangoForma.jpg" alt="Losango">
+                <figcaption>Losango</figcaption>
+                <button class="choose-btn" data-form="losango">Selecionar</button>
+            </figure>
+
+            <figure class="form-item">
+                <img src="image/estrelaForma.jpg" alt="Estrela">
+                <figcaption>Estrela</figcaption>
+                <button class="choose-btn" data-form="estrela">Selecionar</button>
+            </figure>
+
+            <figure class="form-item">
+                <img src="image/coracaoForma.jpg" alt="Coração">
+                <figcaption>Coração</figcaption>
+                <button class="choose-btn" data-form="coracao">Selecionar</button>
+            </figure>
+        </section>
+    </main>
+
+    <script>
+    // ação dos botões (exemplo)
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.choose-btn');
+        if (!btn) return;
+        const form = btn.dataset.form;
+        console.log('Selecionado:', form);
+        // ex: window.location.href = `fase_${form}.html`;
+    });
+    </script>
+</body>
+</html>

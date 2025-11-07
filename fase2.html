@@ -10,10 +10,16 @@
 <body>
     <link rel="stylesheet" href="styleFase2.css">
     <div class="bgFase1">
-        <div class="quadroNegro" style="position: relative; overflow: hidden;">
-        <canvas id="drawCanvas" width="1920" height="1080"></canvas>
-    </div>
+        <div class="quadroNegro">
+            <canvas id="drawCanvas" width="1920" height="1080"></canvas>
 
+            
+            <div class="text" style="position:absolute; top: 13%; left:50%; 
+                transform:translateX(-50%); z-index:50; width:70%; text-align:centers; font-size:1.7rem; font-family: sans-serif;">
+                "Um lápis tem o corpo comprido e uma pontinha! Use um retângulo e um triângulo para desenhar o seu!"
+            </div>
+        </div>
+    </div>
 
     <div class="voltar-container">
         <button class="buttonVoltar" onclick="window.location.href='index.html'">
@@ -33,7 +39,6 @@
         <button class="color-btn" data-color="#00bcd4" style="background:#00bcd4" title="Ciano" aria-label="Ciano"></button>
     </div>
 
-    
     <script src="fase2script.js"></script>
 </body>
 

@@ -197,3 +197,27 @@ window.addEventListener('load', () => {
         ]
     });
 });
+
+function fitCanvasToViewport() {
+    const canvas = document.getElementById('drawCanvas');
+    if (!canvas) return;
+    // definir resolução do canvas igual à viewport para evitar blur
+    const ratio = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * ratio);
+    canvas.height = Math.round(h * ratio);
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    // redesenha se existir função drawShapes ou initShapePainter já configurado
+    if (typeof drawShapes === 'function') drawShapes();
+    if (window.painter && typeof window.painter.setShapes === 'function') {
+        // força redesenho via painter se estiver usando initShapePainter
+        const s = window.painter.getShapes();
+        window.painter.setShapes(s);
+    }
+}
+window.addEventListener('load', fitCanvasToViewport);
+window.addEventListener('resize', fitCanvasToViewport);

@@ -4,9 +4,13 @@ let brushColor = "#dddddd";
 
 // Formas geométricas com posição e cor
 const shapes = [
-    { type: 'circle', x: 200, y: 200, r: 60, color: "#fff" },
-    { type: 'square', x: 400, y: 150, size: 120, color: "#fff" },
-    { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" }
+        // curva S em pé (iniciando no topo e descendo)
+    // points: [x0,y0, cx1,cy1, cx2,cy2, x1,y1]
+    { type: 'scurve', points: [300, 80, 100, 200, 500, 360, 300, 520], strokeWidth: 12, color: "#fff" },
+    // ellipse existente
+    { type: 'ellipse', x: 200, y: 200, rx: 120, ry: 150, color: "#fff" }
+
+
 ];
 
 // Drag and drop variables
@@ -26,6 +30,25 @@ function drawShapes() {
             ctx.strokeStyle = "#f5f5f5ff";
             ctx.lineWidth = 3;
             ctx.stroke();
+        } else if (shape.type === 'ellipse') {
+            ctx.beginPath();
+            // usar ctx.ellipse para desenhar oval
+            ctx.ellipse(shape.x, shape.y, shape.rx, shape.ry, 0, 0, 2 * Math.PI);
+            ctx.fillStyle = shape.color;
+            ctx.fill();
+            ctx.strokeStyle = "#f5f5f5ff";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        } else if (shape.type === 'scurve') {
+            // desenha curva em S usando Path2D (cubic Bézier)
+            const p = shape.points;
+            const path = new Path2D();
+            path.moveTo(p[0], p[1]);
+            path.bezierCurveTo(p[2], p[3], p[4], p[5], p[6], p[7]);
+            ctx.lineWidth = shape.strokeWidth || 6;
+            ctx.strokeStyle = shape.color;
+            ctx.lineCap = 'round';
+            ctx.stroke(path);
         } else if (shape.type === 'square') {
             ctx.beginPath();
             ctx.rect(shape.x, shape.y, shape.size, shape.size);
@@ -73,6 +96,23 @@ canvas.addEventListener('click', (e) => {
             if (dist <= shape.r) {
                 shape.color = brushColor;
             }
+        } else if (shape.type === 'ellipse') {
+            // ponto dentro da elipse: ((dx/rx)^2 + (dy/ry)^2) <= 1
+            const dx = x - shape.x;
+            const dy = y - shape.y;
+            if ((dx * dx) / (shape.rx * shape.rx) + (dy * dy) / (shape.ry * shape.ry) <= 1) {
+                shape.color = brushColor;
+            }
+        } else if (shape.type === 'scurve') {
+            // usa Path2D e isPointInStroke para detectar clique próximo à curva
+            const p = shape.points;
+            const path = new Path2D();
+            path.moveTo(p[0], p[1]);
+            path.bezierCurveTo(p[2], p[3], p[4], p[5], p[6], p[7]);
+            ctx.lineWidth = shape.strokeWidth || 6;
+            if (ctx.isPointInStroke(path, x, y)) {
+                shape.color = brushColor;
+            }
         } else if (shape.type === 'square') {
             if (
                 x >= shape.x &&
@@ -116,6 +156,27 @@ canvas.addEventListener('mousedown', (e) => {
                 draggingShape = shape;
                 offsetX = x - shape.x;
                 offsetY = y - shape.y;
+                return;
+            }
+        } else if (shape.type === 'ellipse') {
+            const dx = x - shape.x;
+            const dy = y - shape.y;
+            if ((dx * dx) / (shape.rx * shape.rx) + (dy * dy) / (shape.ry * shape.ry) <= 1) {
+                draggingShape = shape;
+                offsetX = x - shape.x;
+                offsetY = y - shape.y;
+                return;
+            }
+        } else if (shape.type === 'scurve') {
+            const p = shape.points;
+            const path = new Path2D();
+            path.moveTo(p[0], p[1]);
+            path.bezierCurveTo(p[2], p[3], p[4], p[5], p[6], p[7]);
+            ctx.lineWidth = shape.strokeWidth || 6;
+            if (ctx.isPointInStroke(path, x, y)) {
+                // inicia arrasto: guarda posição inicial do mouse e cópia dos pontos
+                draggingShape = shape;
+                draggingShape._dragStart = { x, y, origPoints: shape.points.slice() };
                 return;
             }
         } else if (shape.type === 'square') {
@@ -167,15 +228,26 @@ canvas.addEventListener('mousemove', (e) => {
     } else if (draggingShape.type === 'triangle') {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
+    } else if (draggingShape.type === 'ellipse') {
+        draggingShape.x = x - offsetX;
+        draggingShape.y = y - offsetY;
+    } else if (draggingShape.type === 'scurve') {
+        // atualiza todos os pontos com o deslocamento desde o início do arrasto
+        const ds = draggingShape._dragStart;
+        const dx = x - ds.x;
+        const dy = y - ds.y;
+        draggingShape.points = ds.origPoints.map((v, idx) => (idx % 2 === 0 ? v + dx : v + dy));
     }
     drawShapes();
 });
 
 canvas.addEventListener('mouseup', () => {
+    if (draggingShape && draggingShape._dragStart) delete draggingShape._dragStart;
     draggingShape = null;
 });
 
 canvas.addEventListener('mouseleave', () => {
+    if (draggingShape && draggingShape._dragStart) delete draggingShape._dragStart;
     draggingShape = null;
 });
 

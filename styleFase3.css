@@ -69,13 +69,22 @@ body {
     align-items: center;
 }
 .color-picker {
+    /* centralizado fixo na parte inferior */
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
     display: flex;
     gap: 12px;
     justify-content: center;
     align-items: center;
-    margin: 14px 0;
-    padding: 0 20px;
+    z-index: 60;
+    padding: 8px 12px;
+    border-radius: 999px;
+
 }
+
+/* mantém estilo existente dos botões */
 .color-btn {
     width: 40px;
     height: 40px;
@@ -86,6 +95,7 @@ body {
     transition: transform .12s, border-color .12s;
     padding: 0;
 }
+
 /* estado selecionado */
 .color-btn.selected,
 .color-btn:focus {
@@ -97,4 +107,55 @@ body {
 /* garantir que o botão mostre a cor de fundo definida inline */
 .color-btn[style] {
     background-clip: padding-box;
+}
+
+/* garante que não haja scroll e que o quadro ocupe a viewport inteira */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* remove scroll */
+}
+
+.bgFase1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;   /* ocupa toda a altura da viewport */
+    width: 100vw;
+}
+
+/* quadroNegro ocupa toda a área disponível */
+.quadroNegro {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* imagem de fundo cobre sem criar scroll */
+.quadroNegro img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* canvas acompanha o quadro — resolução real é definida por JS */
+.quadroNegro canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* responsivo: diminui tamanho em telas muito pequenas */
+@media (max-width: 420px) {
+    .color-picker { bottom: 12px; gap: 8px; padding: 6px; }
+    .color-btn { width: 34px; height: 34px; border-width: 2px; }
 }

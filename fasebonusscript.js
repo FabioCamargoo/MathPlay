@@ -182,8 +182,34 @@ canvas.addEventListener('mouseleave', () => {
 // Inicializa as formas
 drawShapes();
 
-// chamar a função genérica com as formas desta fase
-window.addEventListener('load', () => {
+function fitCanvasToViewport() {
+    const canvas = document.getElementById('drawCanvas');
+    if (!canvas) return;
+    const ratio = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    // CSS size (fill viewport)
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+
+    // backing store size for sharp rendering
+    canvas.width = Math.round(w * ratio);
+    canvas.height = Math.round(h * ratio);
+
+    const ctx = canvas.getContext('2d');
+    if (ctx) ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    // redesenha se existir função de desenho
+    if (typeof drawShapes === 'function') drawShapes();
+    if (window.painter && typeof window.painter.setShapes === 'function') {
+        const s = window.painter.getShapes();
+        window.painter.setShapes(s);
+    }
+}
+
+window.addEventListener('load', () => { 
+    fitCanvasToViewport(); 
     // certifique-se que exista <canvas id="drawCanvas"> no HTML e que drawShapes.js foi incluído antes deste script
     initShapePainter({
         canvasId: 'drawCanvas',
@@ -196,3 +222,4 @@ window.addEventListener('load', () => {
         ]
     });
 });
+window.addEventListener('resize', fitCanvasToViewport);

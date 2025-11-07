@@ -4,9 +4,10 @@ let brushColor = "#dddddd";
 
 // Formas geométricas com posição e cor
 const shapes = [
-    { type: 'circle', x: 200, y: 200, r: 60, color: "#fff" },
-    { type: 'square', x: 400, y: 150, size: 120, color: "#fff" },
-    { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" }
+    // quadrado trocado por retângulo em pé
+    { type: 'rect', x: 360, y: 120, width: 550, height: 380, color: "#fff" },
+    { type: 'circle', x: 200, y: 200, r: 25, color: "#fff" },
+    { type: 'circle', x: 200, y: 400, r: 25, color: "#fff" }
 ];
 
 // Drag and drop variables
@@ -26,9 +27,9 @@ function drawShapes() {
             ctx.strokeStyle = "#f5f5f5ff";
             ctx.lineWidth = 3;
             ctx.stroke();
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             ctx.beginPath();
-            ctx.rect(shape.x, shape.y, shape.size, shape.size);
+            ctx.rect(shape.x, shape.y, shape.width, shape.height);
             ctx.fillStyle = shape.color;
             ctx.fill();
             ctx.strokeStyle = "#f5f5f5ff";
@@ -73,12 +74,12 @@ canvas.addEventListener('click', (e) => {
             if (dist <= shape.r) {
                 shape.color = brushColor;
             }
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             if (
                 x >= shape.x &&
-                x <= shape.x + shape.size &&
+                x <= shape.x + shape.width &&
                 y >= shape.y &&
-                y <= shape.y + shape.size
+                y <= shape.y + shape.height
             ) {
                 shape.color = brushColor;
             }
@@ -118,12 +119,12 @@ canvas.addEventListener('mousedown', (e) => {
                 offsetY = y - shape.y;
                 return;
             }
-        } else if (shape.type === 'square') {
+        } else if (shape.type === 'rect') {
             if (
                 x >= shape.x &&
-                x <= shape.x + shape.size &&
+                x <= shape.x + shape.width &&
                 y >= shape.y &&
-                y <= shape.y + shape.size
+                y <= shape.y + shape.height
             ) {
                 draggingShape = shape;
                 offsetX = x - shape.x;
@@ -161,7 +162,7 @@ canvas.addEventListener('mousemove', (e) => {
     if (draggingShape.type === 'circle') {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
-    } else if (draggingShape.type === 'square') {
+    } else if (draggingShape.type === 'rect') {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
     } else if (draggingShape.type === 'triangle') {

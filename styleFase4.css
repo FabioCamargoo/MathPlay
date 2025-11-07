@@ -70,13 +70,22 @@ body {
 }
 
 .color-picker {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
     display: flex;
     gap: 12px;
     justify-content: center;
     align-items: center;
-    margin: 14px 0;
-    padding: 0 20px;
+    z-index: 100;
+    padding: 8px 12px;
+   
+   
+ 
 }
+
+
 .color-btn {
     width: 40px;
     height: 40px;
@@ -98,4 +107,50 @@ body {
 /* garantir que o botão mostre a cor de fundo definida inline */
 .color-btn[style] {
     background-clip: padding-box;
+}
+
+/* garante que a página ocupe a viewport inteira e remove scroll */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* remove scroll */
+}
+
+/* centraliza e faz o quadro ocupar toda a tela */
+.bgFase1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* quadroNegro ocupa toda a área do container */
+.quadroNegro {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* imagem de fundo cobre o quadro sem criar scroll */
+.quadroNegro img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* cobre a área mantendo proporção */
+    display: block;
+}
+
+/* canvas acompanha o tamanho do quadro (resolução real definida por JS) */
+.quadroNegro canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }

@@ -8,7 +8,7 @@ const shapes = [
     { type: 'circle', x: 200, y: 200, r: 25, color: "#fff" },
     // trocado square por rect (retângulo em pé)
    
-    { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" },
+    
     // adicionados 3 círculos
     { type: 'circle', x: 280, y: 320, r: 30, color: "#fff" },
     { type: 'circle', x: 520, y: 320, r: 28, color: "#fff" },

@@ -10,9 +10,8 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -69,13 +68,18 @@ body {
     align-items: center;
 }
 .color-picker {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
     display: flex;
     gap: 12px;
     justify-content: center;
     align-items: center;
-    margin: 14px 0;
-    padding: 0 20px;
+    z-index: 60;
+
 }
+
 .color-btn {
     width: 40px;
     height: 40px;
@@ -86,6 +90,7 @@ body {
     transition: transform .12s, border-color .12s;
     padding: 0;
 }
+
 /* estado selecionado */
 .color-btn.selected,
 .color-btn:focus {
@@ -97,4 +102,58 @@ body {
 /* garantir que o botão mostre a cor de fundo definida inline */
 .color-btn[style] {
     background-clip: padding-box;
+}
+
+/* garante que a página ocupe toda a viewport e remove scroll */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* remove barras de rolagem */
+}
+
+/* mantém o background cobrindo 100% da tela */
+body {
+    background-image: url('image/fase5.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* centraliza o color picker na parte inferior */
+.color-picker {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    z-index: 60;
+
+}
+
+/* mantém estilo existente dos botões */
+.color-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.75);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: transform .12s, border-color .12s;
+    padding: 0;
+}
+
+/* responsivo */
+@media (max-width: 420px) {
+    .color-picker { bottom: 12px; gap: 8px; padding: 6px; }
+    .color-btn { width: 34px; height: 34px; border-width: 2px; }
 }

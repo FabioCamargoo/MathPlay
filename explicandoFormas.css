@@ -1,0 +1,210 @@
+/* ...existing code... */
+:root{
+    --gap: 24px;
+    --item-width: 360px; /* aumentado para imagens maiores */
+    --bg: #0b0b0b;
+    --card-bg: rgba(255,255,255,0.04);
+    --btn-bg: #2a9df4;
+    --btn-color: #fff;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family: Poppins, sans-serif;background:var(--bg);color:#fff}
+
+.forms-page{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:36px 20px;
+    gap:20px;
+}
+
+.page-title{font-size:2rem;margin:0 0 8px 0}
+
+.forms-grid {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* imagens grandes e responsivas */
+    align-items: start;
+    padding: 20px;
+}
+
+/* card/figure */
+.form-item{
+    width:100%;
+    max-width: var(--item-width);
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* imagem com espaço e comportamento responsivo */
+.form-item img{
+    width: 100%;
+    height: auto;        /* mantém imagem inteira sem cortar */
+    max-height: 420px;  /* limita para caber na tela; ajuste se quiser maior */
+    object-fit: contain; /* mostra a imagem inteira */
+    border-radius: 8px;
+    background: #111;
+    display: block;
+}
+
+/* caption and button */
+.form-item figcaption {
+    font-size: 1.05rem;
+    text-align: center;
+    color: #fff;
+}
+
+/* botão principal */
+.choose-btn{
+    width: 100%;
+    max-width: 320px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: #2a9df4;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .12s, box-shadow .12s;
+}
+.choose-btn:active{transform:translateY(1px)}
+.choose-btn:hover{box-shadow:0 6px 16px rgba(42,157,244,0.22)}
+
+/* responsivo: reduzir altura da imagem em telas pequenas */
+@media (max-width:420px){
+    .form-item img{height:120px}
+    .page-title{font-size:1.25rem}
+}
+
+/* carousel */
+.carousel{
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* garantir que o carrossel e as imagens fiquem centralizados */
+.carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* mask that will get explicit width/height from JS to match image */
+.slides-wrapper {
+    overflow: hidden;
+    width: auto;       /* JS will set exact width */
+    height: auto;      /* JS will set exact height */
+    margin: 0 auto;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.04);
+}
+
+/* slides row; we'll translate it by pixels (not %). */
+.slides {
+    display: flex;
+    transition: transform .45s ease;
+    align-items: center;
+}
+
+/* each slide keeps its natural aspect ratio, JS fixes their widths */
+.slide {
+    box-sizing: border-box;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex: 0 0 auto; /* don't stretch, width set by JS */
+}
+
+/* show whole image (no cropping) */
+.slide img {
+    display: block;
+    width: 100%;     /* will fill slide width set by JS */
+    height: auto;    /* preserve aspect ratio, no crop */
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+/* caption and button */
+.slide figcaption{
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.choose-btn{
+    width: 220px;
+    max-width: 90%;
+    padding: 12px;
+    border-radius:8px;
+    border: none;
+    background: var(--btn-bg, #2a9df4);
+    color: var(--btn-color, #fff);
+    font-weight:600;
+    cursor:pointer;
+}
+
+/* prev/next buttons */
+.carousel-btn{
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+}
+.carousel-btn:hover{ transform: scale(1.04); }
+
+/* dots */
+.dots{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 30;
+}
+.dot{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    border: none;
+    cursor: pointer;
+}
+.dot.active{ background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+/* responsive adjustments */
+@media (max-width: 900px){
+    .slide img{ height: 360px; }
+}
+@media (max-width: 600px){
+    .slide img{ height: 240px; }
+    .carousel-btn{ width:40px;height:40px;font-size:22px }
+    .choose-btn{ width: 160px; padding:10px }
+}
+
+/* ...existing code... */

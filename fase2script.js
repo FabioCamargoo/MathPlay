@@ -1,3 +1,15 @@
+function fitCanvasToViewport() {
+    const canvas = document.getElementById('drawCanvas');
+    if (!canvas) return;
+    // ajustar resolução do canvas para evitar distorção/blur
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // se seu desenho depende de coordenadas fixas, ajuste shapes depois ou redesenhe
+    if (typeof drawShapes === 'function') drawShapes();
+}
+window.addEventListener('load', fitCanvasToViewport);
+window.addEventListener('resize', fitCanvasToViewport);
+
 const canvas = document.getElementById('drawCanvas');
 const ctx = canvas.getContext('2d');
 let brushColor = "#dddddd";
