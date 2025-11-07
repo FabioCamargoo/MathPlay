@@ -221,3 +221,46 @@ function fitCanvasToViewport() {
 }
 window.addEventListener('load', fitCanvasToViewport);
 window.addEventListener('resize', fitCanvasToViewport);
+
+/* Conexão botão <-> áudio para fase 3 */
+(function () {
+    const btn = document.getElementById('audioToggle3');
+    const audioEl = document.getElementById('audio-fase3');
+    if (!btn || !audioEl) return;
+
+    function setPlayingState(isPlaying) {
+        btn.classList.toggle('playing', isPlaying);
+        btn.setAttribute('aria-pressed', String(Boolean(isPlaying)));
+        const label = btn.querySelector('.audio-label');
+        if (label) label.textContent = isPlaying ? 'Pausar' : 'Som';
+        if (typeof drawShapes === 'function') setTimeout(drawShapes, 30);
+    }
+
+    btn.addEventListener('click', () => {
+        // pausa outros áudios
+        document.querySelectorAll('audio').forEach(a => {
+            if (a !== audioEl) { try { a.pause(); a.currentTime = 0; } catch (e) {} }
+        });
+
+        // tenta tocar o <audio> (fallback para new Audio em erro)
+        try {
+            audioEl.currentTime = 0;
+            const p = audioEl.play();
+            if (p && p.then) {
+                p.then(() => setPlayingState(true)).catch(() => { /* erro silencioso */ });
+            } else {
+                setPlayingState(true);
+            }
+        } catch (e) {
+            // fallback: criar e tocar Audio se necessário
+            try {
+                const src = btn.getAttribute('data-audio') || 'audio/fase3.mp3';
+                const a = new Audio(src);
+                a.play().then(() => setPlayingState(true)).catch(() => {});
+                a.addEventListener('ended', () => setPlayingState(false));
+            } catch (err) {}
+        }
+    });
+
+    audioEl.addEventListener('ended', () => setPlayingState(false));
+})();

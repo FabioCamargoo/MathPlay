@@ -9,8 +9,8 @@
 
     <link rel="stylesheet" href="styleFase6.css">
     <div class="bgFase1">
-        <div class="quadroNegro" style="position: relative; overflow: hidden;">
-            <canvas id="drawCanvas" width="1920" height="1080"></canvas>
+        <div class="quadroNegro" style="position:relative; overflow:hidden; width:100%; max-width:1200px; aspect-ratio:16/9;">
+            <canvas id="drawCanvas"></canvas>
         </div>
 
                <div class="text"
@@ -20,9 +20,15 @@
         </div>
 
         <div class="voltar-container">
-            <button class="buttonVoltar" onclick="window.location.href='index.html'">
-                <img class="imgVoltar" src="image/botao.png" alt="" srcset="">
-                <span class="square-label">Tela inicial</span>
+            <button type="button" class="buttonVoltar" onclick="window.location.href='index.html'" aria-label="Tela inicial">
+                <img class="imgVoltar" src="image/botao.png" alt="Tela inicial">
+                <span class="button-label">Tela inicial</span>
+            </button>
+
+            <button type="button" id="audioToggle6" class="buttonVoltar audio-button"
+                    data-audio="audio/fase6.mp3" aria-pressed="false" aria-label="Som da fase 6">
+                <img class="imgVoltar" src="image/botao.png" alt="Som">
+                <span class="button-label audio-label">Som</span>
             </button>
         </div>
 
@@ -46,11 +52,10 @@
             aria-label="Ciano"></button>
     </div>
 
+    <audio id="audio-fase6" src="audio/fase6.mp3" preload="auto"></audio>
 
     <script src="fase6script.js"></script>
 </body>
 </body>
 
-</html>
-</body>
 </html>

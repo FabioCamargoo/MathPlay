@@ -28,45 +28,54 @@ body {
 
 .buttonVoltar {
     position: relative;
-    display: flex;
+    width: 150px;              /* ajuste conforme o tamanho real do botao.png */
+    height: 150px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border-radius: 10px;
-    border: none;
     cursor: pointer;
-    transition: transform 0.2s;
-    padding: 0;
-    overflow: hidden;
-
 }
-.square-label {
+
+/* garante que a imagem preencha o botão e fique atrás do texto */
+.buttonVoltar img,
+.buttonVoltar .imgVoltar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+}
+
+/* rótulo centralizado sobre a imagem do botão */
+.buttonVoltar .button-label,
+.buttonVoltar .square-label {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    color: #222;
-    font-weight: bold;
-    font-size: 1.2rem;
+    z-index: 2;
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.88rem;
     pointer-events: none;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
 }
 
-.buttonVoltar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-    display: block;
-}
 .voltar-container {
-    position: fixed;
-    right: 40px;    
-    bottom: 40px;   
-    z-index: 10;
     display: flex;
-    justify-content: flex-end;
+    gap: 12px;
     align-items: center;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1200;
 }
+
 .color-picker {
     position: fixed;
     left: 50%;
@@ -156,4 +165,6 @@ body {
 @media (max-width: 420px) {
     .color-picker { bottom: 12px; gap: 8px; padding: 6px; }
     .color-btn { width: 34px; height: 34px; border-width: 2px; }
+    .buttonVoltar { width: 56px; height: 56px; }
+    .buttonVoltar .button-label { font-size: 0.78rem; }
 }

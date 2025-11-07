@@ -23,12 +23,19 @@
         </div>
 
         <div class="voltar-container">
-            <button class="buttonVoltar" onclick="window.location.href='index.html'">
-                <img class="imgVoltar" src="image/botao.png" alt="" srcset="">
-                <span class="square-label">Tela inicial</span>
+            <button type="button" class="buttonVoltar" onclick="window.location.href='index.html'" aria-label="Tela inicial">
+                <img class="imgVoltar" src="image/botao.png" alt="Tela inicial">
+                <span class="button-label">Tela inicial</span>
+            </button>
+
+            <button type="button" id="audioToggle5" class="buttonVoltar audio-button" data-audio="audio/fase5.mp3" aria-pressed="false" aria-label="Som da fase 5">
+                <img class="imgVoltar" src="image/botao.png" alt="Som">
+                <span class="button-label audio-label">Som</span>
             </button>
         </div>
 
+        <!-- elemento de áudio para fase 5 -->
+        <audio id="audio-fase5" src="audio/fase5.mp3" preload="auto"></audio>
     </div>
 
     <div class="color-picker">

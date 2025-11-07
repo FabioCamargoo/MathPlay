@@ -12,7 +12,7 @@
 
     <div class="bgFase1">
         <div class="quadroNegro" style="position: relative; overflow: hidden;">
-            <canvas id="drawCanvas" width="1920" height="1080"></canvas>
+            <canvas id="drawCanvas"></canvas>
         </div>
 
             <div class="text" style="position:absolute; top: 10%; left:50%; 
@@ -23,11 +23,18 @@
 
 
         <div class="voltar-container">
-            <button class="buttonVoltar" onclick="window.location.href='index.html'">
-                <img class="imgVoltar" src="image/botao.png" alt="" srcset="">
-                <span class="square-label">Tela inicial</span>
+            <button type="button" class="buttonVoltar" onclick="window.location.href='index.html'" aria-label="Tela inicial">
+                <img class="imgVoltar" src="image/botao.png" alt="Tela inicial">
+                <span class="button-label">Tela inicial</span>
+            </button>
+            <button type="button" id="audioToggle4" class="buttonVoltar audio-button" data-audio="audio/fase4.mp3" aria-pressed="false" aria-label="Som da fase 4">
+                <img class="imgVoltar" src="image/botao.png" alt="Som">
+                <span class="button-label audio-label">Som</span>
             </button>
         </div>
+
+        <!-- elemento de áudio para fase 4 (coloque audio/fase4.mp3 em /audio/) -->
+        <audio id="audio-fase4" src="audio/fase4.mp3" preload="auto"></audio>
 
         <div class="color-picker">
             <button class="color-btn" data-color="#222" style="background:#222" title="Preto"

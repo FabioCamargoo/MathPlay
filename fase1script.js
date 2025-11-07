@@ -196,3 +196,212 @@ window.addEventListener('load', () => {
         ]
     });
 });
+
+// botão de áudio: play/pause simples
+document.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('audio-fase1');
+    const btn = document.getElementById('audioToggle');
+    if (!audio || !btn) return;
+
+    // garantir acessibilidade
+    btn.type = 'button';
+
+    function setPlayingState(isPlaying) {
+        btn.classList.toggle('playing', isPlaying);
+        btn.setAttribute('aria-pressed', String(Boolean(isPlaying)));
+        btn.querySelector('.audio-label').textContent = isPlaying ? 'Pausar' : 'Som';
+    }
+
+    btn.addEventListener('click', () => {
+        // reinicia outros áudios se necessário (procura elementos <audio> na página)
+        document.querySelectorAll('audio').forEach(a => {
+            if (a !== audio) { try { a.pause(); a.currentTime = 0; } catch (e) {} }
+        });
+
+        if (audio.paused) {
+            audio.currentTime = 0;
+            const playPromise = audio.play();
+            if (playPromise && playPromise.then) {
+                playPromise.then(() => setPlayingState(true)).catch(() => { /* erro silencioso */ });
+            } else {
+                setPlayingState(true);
+            }
+        } else {
+            audio.pause();
+            audio.currentTime = 0;
+            setPlayingState(false);
+        }
+    });
+
+    // quando terminar, atualizar estado do botão
+    audio.addEventListener('ended', () => setPlayingState(false));
+})();
+
+// garante que o botão de áudio toque o som (robusto, com fallback)
+(function () {
+    // tenta obter o <audio> do DOM; se não existir cria um Audio() como fallback
+    const audioEl = document.getElementById('audio-fase1') || new Audio('audio/fase1.mp3');
+    const btn = document.getElementById('audioToggle');
+
+    if (!btn) return;
+
+    btn.type = 'button'; // garante que não envie formulários
+    // função que atualiza visual do botão
+    function setPlayingState(isPlaying) {
+        btn.classList.toggle('playing', isPlaying);
+        btn.setAttribute('aria-pressed', String(Boolean(isPlaying)));
+        const label = btn.querySelector('.audio-label');
+        if (label) label.textContent = isPlaying ? 'Pausar' : 'Som';
+    }
+
+    btn.addEventListener('click', () => {
+        // pausa outros áudios na página
+        document.querySelectorAll('audio').forEach(a => {
+            if (a !== audioEl) { try { a.pause(); a.currentTime = 0; } catch (e) {} }
+        });
+
+        // garante que o audio não esteja mudo
+        try { audioEl.muted = false; audioEl.volume = audioEl.volume || 1; } catch (e) {}
+
+        // sempre tenta tocar (reinicia do início)
+        try {
+            audioEl.currentTime = 0;
+            const p = audioEl.play();
+            if (p && p.then) {
+                p.then(() => setPlayingState(true)).catch(() => { /* erro silencioso */ });
+            } else {
+                // browsers antigos que não retornam promise
+                setPlayingState(true);
+            }
+        } catch (err) {
+            /* erro silencioso */
+        }
+    });
+
+    // quando terminar, volta ao estado inicial
+    try {
+        audioEl.addEventListener && audioEl.addEventListener('ended', () => setPlayingState(false));
+    } catch (e) {}
+})();
+
+// bloco para tocar áudio do botão (coloque no final do arquivo)
+(function () {
+    const btn = document.getElementById('audioToggle');
+    const audioEl = document.getElementById('audio-fase1');
+
+    if (!btn || !audioEl) return;
+
+    // ao clicar, usa o data-audio do botão para definir o src e tocar
+    btn.addEventListener('click', () => {
+        // caminho do áudio que você quer tocar (relativo à pasta MathPlay)
+        const src = btn.getAttribute('data-audio') || audioEl.src;
+        if (!src) {
+            return;
+        }
+
+        // configura o src se necessário
+        if (audioEl.src !== src && !audioEl.src.endsWith(src)) {
+            audioEl.src = src;
+            try { audioEl.load(); } catch (e) {}
+        }
+
+        // pausa outros áudios na página
+        document.querySelectorAll('audio').forEach(a => {
+            if (a !== audioEl) { try { a.pause(); a.currentTime = 0; } catch (e) {} }
+        });
+
+        // reproduz (gesture do usuário — não deve ser bloqueado)
+        audioEl.currentTime = 0;
+        audioEl.play().then(() => {
+            btn.classList.add('playing');
+            const label = btn.querySelector('.audio-label');
+            if (label) label.textContent = 'Pausar';
+        }).catch(() => { /* erro silencioso */ });
+    });
+})();
+
+// garante que as formas permaneçam visíveis quando o áudio for tocado/pausado/terminar
+(function () {
+    const btn = document.getElementById('audioToggle');
+    const audioEl = document.getElementById('audio-fase1');
+
+    if (!audioEl) return;
+
+    function safeDraw() {
+        try {
+            if (typeof drawShapes === 'function') drawShapes();
+        } catch (err) {
+            console.warn('Erro ao redesenhar shapes:', err);
+        }
+    }
+
+    // redesenha em eventos do áudio
+    audioEl.addEventListener('play', safeDraw);
+    audioEl.addEventListener('pause', safeDraw);
+    audioEl.addEventListener('ended', safeDraw);
+
+    // redesenha logo após clique (pequeno atraso para garantir que play() inicie)
+    if (btn) {
+        btn.addEventListener('click', () => {
+            setTimeout(safeDraw, 50);
+        });
+    }
+})();
+
+/* Conexão botão <-> áudio */
+(function () {
+    const btn = document.getElementById('audioToggle');
+    const audioEl = document.getElementById('audio-fase1');
+
+    if (!btn) return;
+
+    // se audio existe no data-audio do botão, usa isso como src (fallback)
+    const dataSrc = btn.getAttribute('data-audio');
+    if (audioEl && dataSrc && (!audioEl.src || audioEl.src.endsWith('/'))) {
+        audioEl.src = dataSrc;
+    }
+
+    function setPlayingState(isPlaying) {
+        btn.classList.toggle('playing', isPlaying);
+        btn.setAttribute('aria-pressed', String(Boolean(isPlaying)));
+        const label = btn.querySelector('.audio-label');
+        if (label) label.textContent = isPlaying ? 'Pausar' : 'Som';
+        // redesenha as formas para garantir que continuem visíveis
+        if (typeof drawShapes === 'function') setTimeout(drawShapes, 30);
+    }
+
+    btn.addEventListener('click', () => {
+        // encontra ou atualiza elemento de áudio (se não existir, cria)
+        let a = audioEl;
+        if (!a) {
+            const src = btn.getAttribute('data-audio');
+            if (!src) { return; }
+            a = new Audio(src);
+        }
+
+        // pausa outros áudios na página
+        document.querySelectorAll('audio').forEach(x => {
+            if (x !== a) { try { x.pause(); x.currentTime = 0; } catch (e) {} }
+        });
+
+        // toggle play/pause (reinicia sempre no início)
+        if (a.paused) {
+            a.currentTime = 0;
+            const p = a.play();
+            if (p && p.then) {
+                p.then(() => setPlayingState(true)).catch(() => { /* erro silencioso */ });
+            } else {
+                setPlayingState(true);
+            }
+        } else {
+            a.pause();
+            a.currentTime = 0;
+            setPlayingState(false);
+        }
+
+        // ensure draw after click
+        if (typeof drawShapes === 'function') setTimeout(drawShapes, 50);
+    });
+
+    if (audioEl) audioEl.addEventListener('ended', () => setPlayingState(false));
+})();

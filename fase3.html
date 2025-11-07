@@ -13,17 +13,25 @@
         <div class="quadroNegro" style="position: relative; overflow: hidden;">
             <canvas id="drawCanvas" width="1920" height="1080"></canvas>
         </div>
-            <div class="text" style="position:absolute; top: 10%; left:72%; 
+            <div class="text" style="position:absolute; top: 10%; left:65%; 
                 transform:translateX(-50%); z-index:50; width:80%; text-align:centers; font-size:2rem; font-family: sans-serif;">
                 "Construa uma casinha com um quadrado e um telhado triangular"
             </div>
 
         <div class="voltar-container">
             <button class="buttonVoltar" onclick="window.location.href='index.html'">
-                <img class="imgVoltar" src="image/botao.png" alt="" srcset="">
-                <span class="square-label">Tela inicial</span>
+                <img class="imgVoltar" src="image/botao.png" alt="Tela inicial">
+                <span class="button-label">Tela inicial</span>
+            </button>
+
+            <button type="button" id="audioToggle3" class="buttonVoltar audio-button" data-audio="audio/fase3.mp3" aria-pressed="false" aria-label="Som da fase 3">
+                <img class="imgVoltar" src="image/botao.png" alt="Som">
+                <span class="button-label audio-label">Som</span>
             </button>
         </div>
+
+        <audio id="audio-fase3" src="TrabalhoADS-audios/TrabalhoADS-audios/Fases&Descricao/enunciado-fase3.mp3" preload="auto"></audio>
+
         <div class="color-picker">
             <button class="color-btn" data-color="#222" style="background:#222" title="Preto"
                 aria-label="Preto"></button>

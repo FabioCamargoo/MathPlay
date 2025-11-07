@@ -29,6 +29,135 @@ body {
 
 .buttonVoltar {
     position: relative;
+    width:150px;    /* ajuste conforme o tamanho real de image/botao.png */
+    height: 150px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.buttonVoltar img,
+.buttonVoltar .imgVoltar {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+}
+
+/* texto centralizado sobre a imagem do botão */
+.buttonVoltar .button-label,
+.buttonVoltar .square-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    pointer-events: none;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+}
+
+/* responsivo: reduz tamanho em telas pequenas */
+@media (max-width: 420px) {
+    .buttonVoltar { width: 56px; height: 56px; }
+    .buttonVoltar .button-label { font-size: 0.8rem; }
+}
+
+/* garante que o rótulo fique sobre a imagem do botão */
+.buttonVoltar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 0;
+    overflow: hidden;
+
+}
+.square-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #222;
+    font-weight: bold;
+    font-size: 1.2rem;
+    pointer-events: none;
+}
+
+.buttonVoltar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    display: block;
+}
+.voltar-container {
+    position: fixed;
+    right: 40px;    
+    bottom: 40px;   
+    z-index: 10;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.color-picker {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 8px 12px;
+   
+   
+ 
+}
+
+
+.color-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.75);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: transform .12s, border-color .12s;
+    padding: 0;
+}
+/* estado selecionado */
+.color-btn.selected,
+.color-btn:focus {
+    outline: none;
+    border-color: #222;
+    transform: scale(1.06);
+}
+
+/* garantir que o botão mostre a cor de fundo definida inline */
+.color-btn[style] {
+    background-clip: padding-box;
+}
+
+/* garante que o rótulo fique sobre a imagem do botão */
+.buttonVoltar {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -130,8 +259,11 @@ html, body {
 .quadroNegro {
     position: relative;
     width: 100%;
-    height: 100%;
+    max-width: 1200px; /* ajuste conforme desejar */
+    margin: 0 auto;
+    aspect-ratio: 16 / 9; /* fixa a proporção (evita esticar) */
     overflow: hidden;
+    background: transparent;
 }
 
 /* imagem de fundo cobre o quadro sem criar scroll */

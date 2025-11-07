@@ -1,55 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-
-<body>
-
     <link rel="stylesheet" href="styleBonus.css">
+</head>
+<body>
     <div class="bgFase1">
         <div class="quadroNegro" style="position: relative; overflow: hidden;">
-            <canvas id="drawCanvas" width="1920" height="1080"></canvas>
+            <canvas id="drawCanvas"></canvas>
         </div>
 
-        <div class="text"
-            style="position:absolute; top: 10%; left:70%; 
-                transform:translateX(-50%); z-index:50; width:80%; text-align:centers; font-size:2rem; font-family: sans-serif;">
+        <div class="text" style="position:absolute; top: 10%; left:57%; transform:translateX(-50%); z-index:50; width:80%; text-align:center; font-size:2rem; font-family: sans-serif;">
             “Olha um foguetinho pronto pra voar até as estrelas! Use suas formas para construí-lo!”
         </div>
 
         <div class="voltar-container">
-            <button class="buttonVoltar" onclick="window.location.href='index.html'">
-                <img class="imgVoltar" src="image/botao.png" alt="" srcset="">
-                <span class="square-label">Tela inicial</span>
+            <button type="button" class="buttonVoltar" onclick="window.location.href='index.html'" aria-label="Tela inicial">
+                <img class="imgVoltar" src="image/botao.png" alt="Tela inicial">
+                <span class="button-label">Tela inicial</span>
+            </button>
+
+            <button type="button" id="audioToggleBonus" class="buttonVoltar audio-button" data-audio="audio/faseBonus.mp3" aria-pressed="false" aria-label="Som da fase Bônus">
+                <img class="imgVoltar" src="image/botao.png" alt="Som">
+                <span class="button-label audio-label">Som</span>
             </button>
         </div>
 
+        <!-- elemento de áudio -->
+        <audio id="audio-faseBonus" src="audio/faseBonus.mp3" preload="auto"></audio>
     </div>
 
     <div class="color-picker">
-        <button class="color-btn" data-color="#222" style="background:#222" title="Preto" aria-label="Preto"></button>
-        <button class="color-btn" data-color="#e74c3c" style="background:#e74c3c" title="Vermelho"
-            aria-label="Vermelho"></button>
-        <button class="color-btn" data-color="#3498db" style="background:#3498db" title="Azul"
-            aria-label="Azul"></button>
-        <button class="color-btn" data-color="#27ae60" style="background:#27ae60" title="Verde"
-            aria-label="Verde"></button>
-        <button class="color-btn" data-color="#f1c40f" style="background:#f1c40f" title="Amarelo"
-            aria-label="Amarelo"></button>
-        <button class="color-btn" data-color="#9b59b6" style="background:#9b59b6" title="Roxo"
-            aria-label="Roxo"></button>
-        <button class="color-btn" data-color="#ff9800" style="background:#ff9800" title="Laranja"
-            aria-label="Laranja"></button>
-        <button class="color-btn" data-color="#00bcd4" style="background:#00bcd4" title="Ciano"
-            aria-label="Ciano"></button>
+        <button type="button" class="color-btn" data-color="#222" style="background:#222" title="Preto" aria-label="Preto"></button>
+        <button type="button" class="color-btn" data-color="#e74c3c" style="background:#e74c3c" title="Vermelho" aria-label="Vermelho"></button>
+        <button type="button" class="color-btn" data-color="#3498db" style="background:#3498db" title="Azul" aria-label="Azul"></button>
+        <button type="button" class="color-btn" data-color="#27ae60" style="background:#27ae60" title="Verde" aria-label="Verde"></button>
+        <button type="button" class="color-btn" data-color="#f1c40f" style="background:#f1c40f" title="Amarelo" aria-label="Amarelo"></button>
+        <button type="button" class="color-btn" data-color="#9b59b6" style="background:#9b59b6" title="Roxo" aria-label="Roxo"></button>
+        <button type="button" class="color-btn" data-color="#ff9800" style="background:#ff9800" title="Laranja" aria-label="Laranja"></button>
+        <button type="button" class="color-btn" data-color="#00bcd4" style="background:#00bcd4" title="Ciano" aria-label="Ciano"></button>
     </div>
 
     <script src="fasebonusscript.js"></script>
 </body>
-</body>
-
 </html>

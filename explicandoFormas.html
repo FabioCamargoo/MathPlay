@@ -15,62 +15,126 @@
             <figure class="form-item">
                 <img src="image/circuloForma.jpg" alt="Círculo">
                 <figcaption>Círculo</figcaption>
-                <button class="choose-btn" data-form="circulo">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="circulo">Selecionar</button>
             </figure>
 
             <figure class="form-item">
                 <img src="image/quadradoForma.jpg" alt="Quadrado">
                 <figcaption>Quadrado</figcaption>
-                <button class="choose-btn" data-form="quadrado">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="quadrado">Selecionar</button>
             </figure>
 
             <figure class="form-item">
                 <img src="image/trianguloForma.jpg" alt="Triângulo">
                 <figcaption>Triângulo</figcaption>
-                <button class="choose-btn" data-form="triangulo">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="triangulo">Selecionar</button>
             </figure>
 
             <figure class="form-item">
                 <img src="image/retanguloForma.jpg" alt="Retângulo">
                 <figcaption>Retângulo</figcaption>
-                <button class="choose-btn" data-form="retangulo">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="retangulo">Selecionar</button>
             </figure>
 
             <figure class="form-item">
                 <img src="image/ovalForma.jpg" alt="Elipse">
                 <figcaption>Elipse</figcaption>
-                <button class="choose-btn" data-form="elipse">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="elipse">Selecionar</button>
             </figure>
 
             <figure class="form-item">
                 <img src="image/losangoForma.jpg" alt="Losango">
                 <figcaption>Losango</figcaption>
-                <button class="choose-btn" data-form="losango">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="losango">Selecionar</button>
             </figure>
 
             <figure class="form-item">
                 <img src="image/estrelaForma.jpg" alt="Estrela">
                 <figcaption>Estrela</figcaption>
-                <button class="choose-btn" data-form="estrela">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="estrela">Selecionar</button>
             </figure>
 
             <figure class="form-item">
                 <img src="image/coracaoForma.jpg" alt="Coração">
                 <figcaption>Coração</figcaption>
-                <button class="choose-btn" data-form="coracao">Selecionar</button>
+                <button type="button" class="choose-btn" data-form="coracao">Selecionar</button>
             </figure>
         </section>
     </main>
 
+    <!-- adicione estes elementos de áudio (coloque os .mp3 em MathPlay\audio\) -->
+    <audio id="audio-circulo" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/circulo.mp3" preload="auto"></audio>
+    <audio id="audio-quadrado" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/quadrado.mp3" preload="auto"></audio>
+    <audio id="audio-triangulo" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/triangulo.mp3" preload="auto"></audio>
+    <audio id="audio-retangulo" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/retangulo.mp3" preload="auto"></audio>
+    <audio id="audio-elipse" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/oval-elipse.mp3" preload="auto"></audio>
+    <audio id="audio-losango" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/losango.mp3" preload="auto"></audio>
+    <audio id="audio-estrela" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/estrela.mp3" preload="auto"></audio>
+    <audio id="audio-coracao" src="TrabalhoADS-audios/TrabalhoADS-audios/Formas/coracao.mp3" preload="auto"></audio>
+
+    <!-- botão voltar canto inferior direito usando imagem + texto -->
+    <button type="button" class="buttonVoltar" onclick="window.location.href='index.html'" aria-label="Tela inicial">
+        <img src="image/botao.png" alt="Voltar" class="imgVoltar">
+        <span class="button-label">Tela inicial</span>
+    </button>
+
     <script>
-    // ação dos botões (exemplo)
-    document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.choose-btn');
-        if (!btn) return;
-        const form = btn.dataset.form;
-        console.log('Selecionado:', form);
-        // ex: window.location.href = `fase_${form}.html`;
-    });
+    (function () {
+        const keys = ['circulo','quadrado','triangulo','retangulo','elipse','losango','estrela','coracao'];
+
+        // monta mapa de áudios: usa <audio> no DOM quando existir, senão cria Audio()
+        const audioMap = {};
+        keys.forEach(k => {
+            const el = document.getElementById('audio-' + k);
+            if (el) {
+                el.preload = 'auto';
+                try { el.load(); } catch (e) {}
+                audioMap[k] = el;
+            } else {
+                const a = new Audio(`audio/${k}.mp3`);
+                a.preload = 'auto';
+                try { a.load(); } catch (e) {}
+                audioMap[k] = a;
+            }
+        });
+
+        let currentAudio = null;
+
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.choose-btn');
+            if (!btn) return;
+            const key = btn.dataset.form;
+            const audio = audioMap[key];
+            if (!audio) {
+                console.warn('Áudio não encontrado para', key);
+                return;
+            }
+
+            // parar e resetar outros áudios
+            Object.values(audioMap).forEach(a => {
+                if (a && a !== audio) {
+                    try { a.pause(); a.currentTime = 0; } catch (err) {}
+                }
+            });
+
+            // conectar play() a promise para capturar erros (ex: autoplay bloqueado)
+            try {
+                audio.currentTime = 0;
+                const p = audio.play();
+                if (p && p.then) {
+                    p.then(() => {
+                        currentAudio = audio;
+                    }).catch(err => {
+                        console.warn('Erro ao reproduzir áudio (play promise):', err);
+                    });
+                } else {
+                    currentAudio = audio;
+                }
+            } catch (err) {
+                console.warn('Erro ao tentar tocar o áudio:', err);
+            }
+        });
+    })();
     </script>
 </body>
 </html>

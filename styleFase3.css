@@ -29,17 +29,24 @@ body {
 
 .buttonVoltar {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     background: transparent;
-    border-radius: 10px;
     border: none;
-    cursor: pointer;
-    transition: transform 0.2s;
     padding: 0;
+    cursor: pointer;
+    width: 150px;    /* ajuste conforme o tamanho do botao.png */
+    height: 150px;
     overflow: hidden;
 
+}
+.buttonVoltar img,
+.buttonVoltar .imgVoltar {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 .square-label {
     position: absolute;
@@ -51,14 +58,23 @@ body {
     font-size: 1.2rem;
     pointer-events: none;
 }
-
-.buttonVoltar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-    display: block;
+.buttonVoltar .button-label,
+.buttonVoltar .square-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff !important;    /* branco */
+    font-weight: 700;
+    font-size: 0.9rem;
+    pointer-events: none;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    z-index: 2;
+    white-space: nowrap;
 }
+.buttonVoltar img { z-index: 1; }
+
 .voltar-container {
     position: fixed;
     right: 40px;    
@@ -76,32 +92,34 @@ body {
     transform: translateX(-50%);
     display: flex;
     gap: 12px;
-    justify-content: center;
     align-items: center;
-    z-index: 60;
-    padding: 8px 12px;
+    justify-content: center;
+    z-index: 3000;          /* acima do canvas */
+    padding: 8px 12px;      /* área clicável ao redor */
+    pointer-events: auto;
+     /* opcional: leve fundo para destacar */
     border-radius: 999px;
 
 }
 
 /* mantém estilo existente dos botões */
 .color-btn {
-    width: 40px;
-    height: 40px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
-    border: 3px solid rgba(255,255,255,0.75);
+    border: 3px solid rgba(255,255,255,0.9);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    transition: transform .12s, border-color .12s;
     padding: 0;
+    flex: 0 0 auto;
 }
 
 /* estado selecionado */
 .color-btn.selected,
 .color-btn:focus {
     outline: none;
-    border-color: #222;
-    transform: scale(1.06);
+    border-color: rgba(0,0,0,0.6);
+    transform: scale(1.05);
 }
 
 /* garantir que o botão mostre a cor de fundo definida inline */
@@ -157,5 +175,11 @@ html, body {
 /* responsivo: diminui tamanho em telas muito pequenas */
 @media (max-width: 420px) {
     .color-picker { bottom: 12px; gap: 8px; padding: 6px; }
-    .color-btn { width: 34px; height: 34px; border-width: 2px; }
+    .color-btn { width: 44px; height: 44px; border-width: 2px; }
+}
+
+/* responsivo: reduz tamanho em telas pequenas */
+@media (max-width: 420px) {
+    .buttonVoltar { width: 56px; height: 56px; }
+    .buttonVoltar .button-label { font-size: 0.8rem; }
 }

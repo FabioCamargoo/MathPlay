@@ -208,3 +208,98 @@ window.addEventListener('load', () => {
         ]
     });
 });
+
+function fitCanvasToContainer() {
+    const canvas = document.getElementById('drawCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const ratio = window.devicePixelRatio || 1;
+
+    // tamanho CSS exibido
+    const cssW = canvas.clientWidth;
+    const cssH = canvas.clientHeight;
+
+    // backing store (resolução) para ficar nítido no dispositivo
+    canvas.width = Math.round(cssW * ratio);
+    canvas.height = Math.round(cssH * ratio);
+
+    // define transformação para mapear unidades CSS -> pixels do backing store
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    // redesenha suas formas (chame sua função de desenho)
+    if (typeof drawShapes === 'function') drawShapes();
+}
+
+// executar no load e resize
+window.addEventListener('load', () => {
+    fitCanvasToContainer();
+    // se você inicializa shapes aqui, faça depois de ajustar canvas
+});
+window.addEventListener('resize', () => {
+    fitCanvasToContainer();
+});
+/* conecta botão de áudio (audioToggle4) ao <audio id="audio-fase4"> e trata caminhos com '&' */
+(function () {
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('audioToggle4');
+        let audioEl = document.getElementById('audio-fase4');
+        if (!btn) return;
+
+        // pega caminho preferencial (data-audio > src do <audio> > fallback)
+        const rawPath = (btn.getAttribute('data-audio') || (audioEl && audioEl.getAttribute('src')) || 'audio/fase4.mp3').trim();
+        const src = encodeURI(rawPath);
+
+        // garante elemento <audio>
+        if (!audioEl) {
+            audioEl = document.createElement('audio');
+            audioEl.id = 'audio-fase4';
+            audioEl.preload = 'auto';
+            document.body.appendChild(audioEl);
+        }
+        if (!audioEl.src || !audioEl.src.endsWith(src)) {
+            audioEl.src = src;
+            try { audioEl.load(); } catch (e) {}
+        }
+
+        btn.type = 'button';
+        function setPlayingState(isPlaying) {
+            btn.classList.toggle('playing', isPlaying);
+            btn.setAttribute('aria-pressed', String(Boolean(isPlaying)));
+            const label = btn.querySelector('.audio-label');
+            if (label) label.textContent = isPlaying ? 'Pausar' : 'Som';
+            if (typeof drawShapes === 'function') setTimeout(drawShapes, 30);
+        }
+
+        btn.addEventListener('click', async () => {
+            // pausa outros áudios na página
+            document.querySelectorAll('audio').forEach(a => { if (a !== audioEl) try { a.pause(); a.currentTime = 0; } catch (_) {} });
+
+            try {
+                if (audioEl.paused) {
+                    audioEl.currentTime = 0;
+                    const p = audioEl.play();
+                    if (p && p.then) await p;
+                    setPlayingState(true);
+                } else {
+                    audioEl.pause();
+                    audioEl.currentTime = 0;
+                    setPlayingState(false);
+                }
+            } catch (err) {
+                // fallback: tentar com new Audio()
+                try {
+                    const a = new Audio(src);
+                    a.preload = 'auto';
+                    a.currentTime = 0;
+                    await a.play();
+                    setPlayingState(true);
+                    a.addEventListener('ended', () => setPlayingState(false));
+                } catch (_) {
+                    // silencioso — se não tocar, verifique o caminho/network (F12 → Network)
+                }
+            }
+        });
+
+        audioEl.addEventListener('ended', () => setPlayingState(false));
+    });
+})();

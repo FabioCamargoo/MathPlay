@@ -10,13 +10,111 @@
 <body>
     <link rel="stylesheet" href="styleFase1.css">
 
+    <!-- container com os botões no canto inferior direito -->
     <div class="voltar-container">
-        <button class="buttonVoltar" onclick="window.location.href='index.html'">
-            <img class="imgVoltar" src="image/botao.png" alt="Voltar">
-            <span class="square-label">Tela inicial</span>
+        <!-- botão Tela inicial -->
+        <button type="button" class="buttonVoltar" onclick="window.location.href='index.html'" aria-label="Tela inicial">
+            <img class="imgVoltar" src="image/botao.png" alt="Tela inicial">
+            <span class="button-label">Tela inicial</span>
+        </button>
+
+        <!-- botão de áudio (mesmo formato, usa botao.png) -->
+        <button type="button" id="audioToggle" class="buttonVoltar audio-button"
+            data-audio="audio/fase1.mp3" aria-pressed="false" aria-label="Som da fase">
+            <img class="imgVoltar" src="image/botao.png" alt="Som">
+            <span class="button-label audio-label">Som</span>
         </button>
     </div>
-     <div class="text" style="position:absolute; top:13%; left:20px; z-index:50; width:320px; text-align:left; font-size:1.7rem; font-family:sans-serif;">
+
+    <!-- elemento de áudio com src (coloque audio/fase1.mp3 na pasta audio/) -->
+    <audio id="audio-fase1" src="TrabalhoADS-audios/TrabalhoADS-audios/Fases&Descricao/enunciado-fase1.mp3" preload="auto"></audio>
+
+    <script>
+    // quick toggle caso o script principal não esteja funcionando
+    (function(){
+        const audio = document.getElementById('audio-fase1');
+        const btn = document.getElementById('audioToggle');
+        if (!audio || !btn) return;
+
+        btn.addEventListener('click', () => {
+            // pausa outros audios
+            document.querySelectorAll('audio').forEach(a => { if (a !== audio) { a.pause(); a.currentTime = 0; } });
+
+            if (audio.paused) {
+                audio.currentTime = 0;
+                audio.play().then(() => {
+                    btn.classList.add('playing');
+                    btn.querySelector('.audio-label').textContent = 'Pausar';
+                }).catch(err => {
+                    console.warn('Erro ao tocar áudio:', err);
+                });
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                btn.classList.remove('playing');
+                btn.querySelector('.audio-label').textContent = 'Audio';
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            btn.classList.remove('playing');
+            btn.querySelector('.audio-label').textContent = 'Audio';
+        });
+    })();
+    </script>
+
+    <script>
+(function () {
+    const btn = document.getElementById('audioToggle');
+    const audioEl = document.getElementById('audio-fase1');
+
+    if (!btn) { console.warn('Botão audioToggle não encontrado'); return; }
+
+    // preferência: data-audio do botão -> src do <audio> -> audio/fase1.mp3
+    const preferredSrc = btn.getAttribute('data-audio') || (audioEl && audioEl.getAttribute('src')) || 'audio/fase1.mp3';
+    console.log('audio debug: preferredSrc=', preferredSrc, 'audioEl.src=', audioEl ? audioEl.src : null);
+
+    function stopAllExcept(active) {
+        document.querySelectorAll('audio').forEach(a => {
+            if (a !== active) { try { a.pause(); a.currentTime = 0; } catch (e) {} }
+        });
+    }
+
+    async function playSrc(src) {
+        try {
+            // use <audio> element se ele tiver o mesmo src, senão cria Audio()
+            let a = audioEl && (audioEl.getAttribute('src') === src || (audioEl.src && audioEl.src.endsWith(src))) ? audioEl : new Audio(src);
+            a.preload = 'auto';
+            a.muted = false;
+            a.volume = a.volume || 1;
+            stopAllExcept(a);
+            a.currentTime = 0;
+            const p = a.play();
+            if (p && p.then) {
+                await p;
+            }
+            btn.classList.add('playing');
+            const label = btn.querySelector('.audio-label');
+            if (label) label.textContent = 'Pausar';
+            a.addEventListener('ended', () => {
+                btn.classList.remove('playing');
+                if (label) label.textContent = 'Som';
+            }, { once: true });
+        } catch (err) {
+            console.warn('Erro ao reproduzir áudio:', err);
+            alert('Não foi possível reproduzir o áudio. Verifique o caminho do arquivo (Console/Network em F12).');
+        }
+    }
+
+    btn.addEventListener('click', () => {
+        playSrc(preferredSrc);
+        // garante que as formas continuem visíveis
+        if (typeof drawShapes === 'function') setTimeout(drawShapes, 50);
+    });
+})();
+</script>
+
+    <div class="text" style="position:absolute; top:13%; left:20px; z-index:50; width:320px; text-align:left; font-size:1.7rem; font-family:sans-serif;">
                  Olá! Seja bem-vindo ao MahPlay! Eu sou a professora das formas e vou te
                  mostrar como brincar! Veja só essa lousa cheia de formas... 
                  Arraste cada uma para o lugar certo e depois pinte com a cor que quiser! Está pronto? Então vamos começar a nossa aventura das formas!
@@ -46,7 +144,7 @@
         <button class="color-btn" data-color="#ff9800" style="background:#ff9800"></button>
         <button class="color-btn" data-color="#00bcd4" style="background:#00bcd4"></button>
     </div>
-    
+
     <script src="fase1script.js"></script>
 </body>
 

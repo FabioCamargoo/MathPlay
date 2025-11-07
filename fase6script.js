@@ -197,3 +197,90 @@ window.addEventListener('load', () => {
         ]
     });
 });
+
+function fitCanvasToContainer() {
+    const canvas = document.getElementById('drawCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const ratio = window.devicePixelRatio || 1;
+
+    // tamanho CSS exibido (clientWidth/clientHeight refletem CSS)
+    const cssW = Math.max(1, canvas.clientWidth);
+    const cssH = Math.max(1, canvas.clientHeight);
+
+    // definir resolução real do canvas
+    canvas.width = Math.round(cssW * ratio);
+    canvas.height = Math.round(cssH * ratio);
+
+    // mapear coordenadas CSS para backing store (evita escalonamento automático)
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    // redesenha (supondo que exista drawShapes)
+    if (typeof drawShapes === 'function') drawShapes();
+}
+// chama ao carregar e redimensionar
+window.addEventListener('load', () => { fitCanvasToContainer(); });
+window.addEventListener('resize', () => { fitCanvasToContainer(); });
+
+/* conecta botão de áudio (fase 6) ao elemento <audio id="audio-fase6"> */
+(function () {
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('audioToggle6');
+        let audioEl = document.getElementById('audio-fase6');
+        if (!btn) return;
+
+        const raw = (btn.getAttribute('data-audio') || (audioEl && audioEl.getAttribute('src')) || 'audio/fase6.mp3').trim();
+        const src = encodeURI(raw);
+
+        // garante elemento <audio>
+        if (!audioEl) {
+            audioEl = document.createElement('audio');
+            audioEl.id = 'audio-fase6';
+            audioEl.preload = 'auto';
+            document.body.appendChild(audioEl);
+        }
+        if (!audioEl.src || !audioEl.src.endsWith(src)) {
+            audioEl.src = src;
+            try { audioEl.load(); } catch (e) {}
+        }
+
+        btn.type = 'button';
+        function setPlayingState(isPlaying) {
+            btn.classList.toggle('playing', isPlaying);
+            btn.setAttribute('aria-pressed', String(Boolean(isPlaying)));
+            const label = btn.querySelector('.audio-label');
+            if (label) label.textContent = isPlaying ? 'Pausar' : 'Som';
+            if (typeof drawShapes === 'function') setTimeout(drawShapes, 30);
+        }
+
+        btn.addEventListener('click', async () => {
+            // pausa outros audios na página
+            document.querySelectorAll('audio').forEach(a => { if (a !== audioEl) try { a.pause(); a.currentTime = 0; } catch (_) {} });
+
+            try {
+                if (audioEl.paused) {
+                    audioEl.currentTime = 0;
+                    const p = audioEl.play();
+                    if (p && p.then) await p;
+                    setPlayingState(true);
+                } else {
+                    audioEl.pause();
+                    audioEl.currentTime = 0;
+                    setPlayingState(false);
+                }
+            } catch {
+                // fallback silencioso: tentar new Audio()
+                try {
+                    const a = new Audio(src);
+                    a.preload = 'auto';
+                    a.currentTime = 0;
+                    await a.play();
+                    setPlayingState(true);
+                    a.addEventListener('ended', () => setPlayingState(false));
+                } catch {}
+            }
+        });
+
+        audioEl.addEventListener('ended', () => setPlayingState(false));
+    });
+})();

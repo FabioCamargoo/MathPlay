@@ -23,10 +23,18 @@
 
     <div class="voltar-container">
         <button class="buttonVoltar" onclick="window.location.href='index.html'">
-            <img class="imgVoltar" src="image/botao.png" alt="" srcset="">
+            <img class="imgVoltar" src="image/botao.png" alt="Tela inicial">
             <span class="square-label">Tela inicial</span>
         </button>
+
+        <!-- botão de áudio usando botao.png -->
+        <button type="button" id="audioToggle2" class="buttonVoltar audio-button" aria-pressed="false" aria-label="Som da fase 2" data-audio="audio/fase2.mp3">
+            <img class="imgVoltar" src="image/botao.png" alt="Som">
+            <span class="button-label audio-label">Som</span>
+        </button>
     </div>
+
+    <audio id="audio-fase2" src="TrabalhoADS-audios/TrabalhoADS-audios/Fases&Descricao/enunciado-fase2.mp3" preload="auto"></audio>
 
     <div class="color-picker">
         <button class="color-btn" data-color="#222" style="background:#222" title="Preto" aria-label="Preto"></button>

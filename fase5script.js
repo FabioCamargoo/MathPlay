@@ -268,3 +268,62 @@ window.addEventListener('load', () => {
         ]
     });
 });
+
+(function () {
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('audioToggle5');
+        let audioEl = document.getElementById('audio-fase5');
+        if (!btn) return;
+
+        const rawPath = (btn.getAttribute('data-audio') || (audioEl && audioEl.getAttribute('src')) || 'audio/fase5.mp3').trim();
+        const src = encodeURI(rawPath);
+
+        if (!audioEl) {
+            audioEl = document.createElement('audio');
+            audioEl.id = 'audio-fase5';
+            audioEl.preload = 'auto';
+            document.body.appendChild(audioEl);
+        }
+        if (!audioEl.src || !audioEl.src.endsWith(src)) {
+            audioEl.src = src;
+            try { audioEl.load(); } catch (e) {}
+        }
+
+        btn.type = 'button';
+        function setPlaying(isPlaying) {
+            btn.classList.toggle('playing', isPlaying);
+            btn.setAttribute('aria-pressed', String(Boolean(isPlaying)));
+            const label = btn.querySelector('.audio-label');
+            if (label) label.textContent = isPlaying ? 'Pausar' : 'Som';
+            if (typeof drawShapes === 'function') setTimeout(drawShapes, 30);
+        }
+
+        btn.addEventListener('click', async () => {
+            document.querySelectorAll('audio').forEach(a => { if (a !== audioEl) try { a.pause(); a.currentTime = 0; } catch (_) {} });
+
+            try {
+                if (audioEl.paused) {
+                    audioEl.currentTime = 0;
+                    const p = audioEl.play();
+                    if (p && p.then) await p;
+                    setPlaying(true);
+                } else {
+                    audioEl.pause();
+                    audioEl.currentTime = 0;
+                    setPlaying(false);
+                }
+            } catch {
+                try {
+                    const a = new Audio(src);
+                    a.preload = 'auto';
+                    a.currentTime = 0;
+                    await a.play();
+                    setPlaying(true);
+                    a.addEventListener('ended', () => setPlaying(false));
+                } catch {}
+            }
+        });
+
+        audioEl.addEventListener('ended', () => setPlaying(false));
+    });
+})();
