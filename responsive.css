@@ -1,0 +1,90 @@
+:root{
+    --btn-size: 72px;
+    --btn-size-sm: 56px;
+    --max-content-width: 1200px;
+    --canvas-max-height: 760px;
+    --gap: 16px;
+    --font-scale: 1;
+}
+
+/* GLOBAL FLUID */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family: Poppins, sans-serif;}
+img, canvas { max-width:100%; height:auto; display:block; }
+
+/* layout containers limits */
+.bgFase1, .forms-page, .quadroNegro, .canvas-wrap {
+    width:100%;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+/* botão padrão (força texto sobre a imagem botao.png) */
+.buttonVoltar {
+    width: var(--btn-size) !important;
+    height: var(--btn-size) !important;
+    position: relative;
+    padding: 0;
+    border: none;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.buttonVoltar img, .buttonVoltar .imgVoltar { width:100%; height:100%; object-fit:contain; display:block; }
+.buttonVoltar .button-label, .buttonVoltar .square-label {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    color:#fff !important; z-index:3; pointer-events:none; text-align:center; font-weight:700;
+    text-shadow:0 1px 3px rgba(0,0,0,0.6);
+}
+
+/* container de botões no canto */
+.voltar-container {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    display:flex;
+    gap: var(--gap);
+    align-items:center;
+    z-index:2200;
+}
+
+/* color picker centralizado embaixo */
+.color-picker {
+    position: fixed;
+    left:50%;
+    bottom: calc(var(--btn-size) + 18px);
+    transform: translateX(-50%);
+    display:flex;
+    gap:12px;
+    z-index:3000;
+}
+
+/* canvas/quadro: ocupar área disponível mantendo proporções */
+.quadroNegro { width:100%; box-sizing:border-box; }
+.quadroNegro canvas { width:100% !important; height:auto !important; display:block; }
+
+/* mobile adjustments */
+@media (max-width: 768px) {
+    :root{ --btn-size: var(--btn-size-sm); --font-scale:0.92; --gap:10px; --max-content-width: 100%; }
+    .buttonVoltar { width: var(--btn-size) !important; height: var(--btn-size) !important; }
+    .color-picker { bottom: calc(var(--btn-size) + 12px); gap:8px; }
+    .forms-grid { gap:12px; padding:10px; }
+}
+
+/* breakpoint 1366x768 — reduzir layout para não esticar demais */
+@media (min-width: 1200px) and (max-width: 1400px) and (max-height: 820px) {
+    :root{ --max-content-width: 900px; --btn-size:56px; --font-scale:0.88; --canvas-max-height:520px; }
+    .bgFase1, .quadroNegro, .forms-page { padding-left:8px; padding-right:8px; }
+}
+
+/* telas muito grandes (1920+) mantêm layout amplo */
+@media (min-width: 1920px) {
+    :root{ --max-content-width: 1400px; --btn-size:80px; --font-scale:1; --canvas-max-height:880px; }
+}
+
+/* pequenas correções para elementos que escondem texto */
+[style*="overflow:hidden"] { /* não tocar mas prevenir cortes de rótulo */ }
