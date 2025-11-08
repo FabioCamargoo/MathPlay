@@ -14,7 +14,10 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden; /* remove scroll */
 }
+
+html { overflow: hidden; }
 
 .MathPlayLogo {
     margin-bottom: 90px;
@@ -33,6 +36,8 @@ body{
 .squares-row {
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;            /* permite quebrar linha e evita sobreposição */
+    justify-content: center;    /* centraliza os botões na linha */
 }
 
 .square-container{
@@ -54,44 +59,72 @@ body{
     transition: transform 0.2s;
     padding: 0;
     overflow: hidden;
+    width: 160px;   /* controla tamanho do botão */
+    height: 160px;
 }
 
 square.active{
     transform: scale(0.95)
 }
 
-.square-img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    pointer-events: none;
+/* garante que a imagem dentro do botão ocupe o espaço definido acima */
+.square img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .square-label {
     position: absolute;
-    color: #fff; /* alterado para branco */
-    font-weight: bold;
-    font-size: 1.50rem;
+    color: #fff; /* texto branco */
+    font-weight: 700;
+    font-size: 1.05rem; /* reduzido para caber melhor */
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
 
 footer {
     position: fixed;
-    left: 20px;
-    bottom: 20px;
+    left: 3px;          /* menos afastado */
+    bottom: 6px;        /* aproxima da borda inferior */
     display: flex;
-    gap: 12px;
+    gap: 2px;            /* menor espaço entre itens */
     align-items: flex-end;
     z-index: 10;
-    background: transparent;
+    padding: 4px 8px;   /* reduz área ocupada */
+    border-radius: 8px;  /* cantos suaves */
+    
 }
 
 footer img {
-    width: 150px;
+    width: 100px;       /* reduz logos */
     height: auto;
     object-fit: contain;
+}
+
+/* botão do footer menor para não conflitar com os logos */
+footer .square {
+    width: 110px;  /* reduz botão de créditos */
+    height: 110px;
+}
+
+footer .square-label { font-size: 0.85rem; }
+
+@media (max-width: 600px) {
+    footer { left: 8px; bottom: 8px; gap: 6px; padding: 5px 8px; }
+    footer img { width: 90px; }
+    footer .square { width: 95px; height: 95px; }
+    footer .square-label { font-size: 0.75rem; }
+}
+
+/* responsivo: reduzir botões em telas menores */
+@media (max-width: 600px) {
+    .square { width: 120px; height: 120px; }
+    .square-label { font-size: 0.95rem; }
+    .MathPlayLogo { margin-bottom: 40px; }
 }

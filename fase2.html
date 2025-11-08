@@ -15,11 +15,6 @@
         <div class="quadroNegro">
             <canvas id="drawCanvas" width="1920" height="1080"></canvas>
 
-            
-            <div class="text" style="position:absolute; top: 17%; left:50%; 
-                transform:translateX(-50%); z-index:50; width:70%; text-align:centers; font-size:1.7rem; font-family: sans-serif;">
-                "Um lápis tem o corpo comprido e uma pontinha! Use um retângulo e um triângulo para desenhar o seu!"
-            </div>
         </div>
     </div>
 
@@ -50,6 +45,8 @@
     </div>
 
     <script src="fase2script.js"></script>
+    <!-- coloque APÓS os scripts que criam `shapes` e `drawShapes()` e APÓS o canvas -->
+    <script src="drag.js"></script>
 </body>
 
 </html>

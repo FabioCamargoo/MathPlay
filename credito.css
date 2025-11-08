@@ -130,6 +130,24 @@ footer img {
     text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
 
+.professorNome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 1.50rem;
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    z-index: 2000;
+}
+
 @media (max-width: 480px) {
     .team {
         gap: 10px;

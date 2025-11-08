@@ -4,8 +4,8 @@ let brushColor = "#dddddd";
 
 // Formas geométricas com posição e cor
 const shapes = [
-    { type: 'circle', x: 200, y: 200, r: 60, color: "#fff" },
-    { type: 'square', x: 400, y: 150, size: 120, color: "#fff" },
+    { type: 'circle', x: 900, y: 200, r: 60, color: "#fff" },
+    { type: 'square', x: 550, y: 150, size: 120, color: "#fff" },
     { type: 'triangle', x: 700, y: 250, size: 120, color: "#fff" }
 ];
 
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (typeof drawShapes === 'function') drawShapes();
         } catch (err) {
-            console.warn('Erro ao redesenhar shapes:', err);
+            // Silenciado: erro ao redesenhar shapes (removido console.warn a pedido do usuário)
         }
     }
 

@@ -162,12 +162,12 @@ html, body {
 /* quadroNegro cobre todo o container */
 .quadroNegro {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100vw;   /* ocupar toda a largura da viewport */
+    height: 100vh;  /* ocupar toda a altura da viewport */
+    max-width: none;
+    margin: 0;
     overflow: hidden;
-    max-width: 1200px;
-    margin: 0 auto;
-    aspect-ratio: 16/9;
+    background: transparent;
 }
 
 /* imagem de fundo cobre sem criar scroll (se usar <img>) */
@@ -181,13 +181,14 @@ html, body {
 }
 
 /* canvas acompanha o tamanho do quadro (resolução real definida por JS) */
-.quadroNegro canvas {
-    position: absolute;
+#drawCanvas {
+    position: fixed;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     display: block;
+    z-index: 1; /* abaixo dos controles */
 }
 
 /* centraliza o color picker na parte inferior */

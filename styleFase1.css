@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -17,6 +18,13 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+/* Remove scroll da página */
+html, body {
+    overflow: hidden;
+    height: 100%;
+    overscroll-behavior: none;
 }
 
 .bgFase1 {
@@ -81,10 +89,13 @@ body {
 }
 
 .color-picker {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 12px; /* um pouco mais para baixo */
     display: flex;
     gap: 12px;
-    justify-content: center;
-    margin-bottom: 18px;
+    z-index: 1200;
 }
 
 .color-btn {
@@ -158,4 +169,3 @@ body {
     transform: scale(1.03);
     filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
 }
-

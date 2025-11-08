@@ -4,11 +4,12 @@ let brushColor = "#dddddd"; // cor selecionada global
 
 // Formas geométricas com posição e cor
 const shapes = [
-    // retângulo em pé (substitui o quadrado)
-    { type: 'rect', x: 360, y: 120, width: 200, height: 300, color: "#fff" },
-    // exemplo de outras formas (ajuste conforme seu arquivo)
-    { type: 'circle', x: 200, y: 200, r: 60, color: "#fff" },
-    { type: 'triangle', x: 700, y: 250, size: 210, color: "#fff" }
+    // retângulo em pé (substitui o quadrado) — reduzido ~20%
+    { type: 'rect', x: 380, y: 140, width: 160, height: 240, color: "#fff" },
+    // círculo — reduzido ~20%
+    { type: 'circle', x: 220, y: 220, r: 48, color: "#fff" },
+    // triângulo — reduzido ~20%
+    { type: 'triangle', x: 720, y: 270, size: 168, color: "#fff" }
 ];
 
 // Drag and drop variables

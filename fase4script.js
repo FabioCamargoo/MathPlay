@@ -159,27 +159,55 @@ canvas.addEventListener('mousedown', (e) => {
     }
 });
 
+function pointInTriangle(px, py, t) {
+    const x1 = t.x, y1 = t.y;
+    const x2 = t.x + t.size, y2 = t.y;
+    const x3 = t.x + t.size / 2, y3 = t.y - t.size;
+    function area(ax, ay, bx, by, cx, cy) {
+        return Math.abs((ax * (by - cy) + bx * (cy - ay) + cx * (ay - by)) / 2);
+    }
+    const A = area(x1, y1, x2, y2, x3, y3);
+    const A1 = area(px, py, x2, y2, x3, y3);
+    const A2 = area(x1, y1, px, py, x3, y3);
+    const A3 = area(x1, y1, x2, y2, px, py);
+    return Math.abs(A - (A1 + A2 + A3)) < 0.5;
+}
+
+function isPointInShape(shape, x, y) {
+    if (shape.type === 'circle') {
+        const dist = Math.hypot(x - shape.x, y - shape.y);
+        return dist <= shape.r;
+    }
+    if (shape.type === 'rect') {
+        return x >= shape.x && x <= shape.x + shape.width && y >= shape.y && y <= shape.y + shape.height;
+    }
+    if (shape.type === 'triangle') {
+        return pointInTriangle(x, y, shape);
+    }
+    return false;
+}
+
 canvas.addEventListener('mousemove', (e) => {
-    if (!draggingShape) return;
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    if (draggingShape.type === 'circle') {
+    if (draggingShape) {
         draggingShape.x = x - offsetX;
         draggingShape.y = y - offsetY;
-    } else if (draggingShape.type === 'rect') {
-        draggingShape.x = x - offsetX;
-        draggingShape.y = y - offsetY;
-    } else if (draggingShape.type === 'triangle') {
-        draggingShape.x = x - offsetX;
-        draggingShape.y = y - offsetY;
+        drawShapes();
+        canvas.style.cursor = 'grabbing';
+        return;
     }
-    drawShapes();
+
+    // hover feedback quando não está arrastando
+    const over = shapes.some(s => isPointInShape(s, x, y));
+    canvas.style.cursor = over ? 'grab' : 'default';
 });
 
 canvas.addEventListener('mouseup', () => {
     draggingShape = null;
+    canvas.style.cursor = 'default';
 });
 
 canvas.addEventListener('mouseleave', () => {
@@ -189,25 +217,7 @@ canvas.addEventListener('mouseleave', () => {
 // Inicializa as formas
 drawShapes();
 
-// chamar a função genérica com as formas desta fase
-window.addEventListener('load', () => {
-    // certifique-se que exista <canvas id="drawCanvas"> no HTML e que drawShapes.js foi incluído antes deste script
-    initShapePainter({
-        canvasId: 'drawCanvas',
-        colorBtnSelector: '.color-btn',
-        defaultColor: '#dddddd',
-        shapes: [
-            { type: 'circle', x: 150, y: 140, r: 50, color: '#ffffff' },
-            // aqui também trocar para rect (retângulo em pé)
-            { type: 'rect', x: 320, y: 90, width: 120, height: 180, color: '#ffffff' },
-            { type: 'triangle', x: 500, y: 180, size: 110, color: '#ffffff' },
-            // replicar os 3 círculos também na inicialização do painter
-            { type: 'circle', x: 280, y: 320, r: 50, color: '#ffffff' },
-            { type: 'circle', x: 520, y: 320, r: 50, color: '#ffffff' },
-            { type: 'circle', x: 640, y: 120, r: 40, color: '#ffffff' }
-        ]
-    });
-});
+// Removido initShapePainter para evitar conflito com o arraste desta fase
 
 function fitCanvasToContainer() {
     const canvas = document.getElementById('drawCanvas');

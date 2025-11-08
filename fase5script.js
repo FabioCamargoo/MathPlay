@@ -4,13 +4,10 @@ let brushColor = "#dddddd";
 
 // Formas geométricas com posição e cor
 const shapes = [
-        // curva S em pé (iniciando no topo e descendo)
-    // points: [x0,y0, cx1,cy1, cx2,cy2, x1,y1]
-    { type: 'scurve', points: [300, 80, 100, 200, 500, 360, 300, 520], strokeWidth: 12, color: "#fff" },
-    // ellipse existente
-    { type: 'ellipse', x: 200, y: 200, rx: 120, ry: 150, color: "#fff" }
-
-
+    // curva S ainda mais centralizada
+    { type: 'scurve', points: [480, 320, 400, 400, 700, 560, 480, 660], strokeWidth: 9, color: "#fff" },
+    // ellipse mais ao centro
+    { type: 'ellipse', x: 600, y: 480, rx: 90, ry: 110, color: "#fff" }
 ];
 
 // Drag and drop variables
@@ -255,19 +252,7 @@ canvas.addEventListener('mouseleave', () => {
 drawShapes();
 
 // chamar a função genérica com as formas desta fase
-window.addEventListener('load', () => {
-    // certifique-se que exista <canvas id="drawCanvas"> no HTML e que drawShapes.js foi incluído antes deste script
-    initShapePainter({
-        canvasId: 'drawCanvas',
-        colorBtnSelector: '.color-btn',
-        defaultColor: '#dddddd',
-        shapes: [
-            { type: 'circle', x: 150, y: 140, r: 50, color: '#ffffff' },
-            { type: 'square', x: 320, y: 110, size: 100, color: '#ffffff' },
-            { type: 'triangle', x: 500, y: 180, size: 110, color: '#ffffff' }
-        ]
-    });
-});
+// Removido initShapePainter para evitar conflito e manter apenas shapes reduzidos
 
 (function () {
     document.addEventListener('DOMContentLoaded', () => {

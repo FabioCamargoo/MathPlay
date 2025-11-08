@@ -104,51 +104,42 @@ canvas.addEventListener('click', (e) => {
 });
 
 // Drag and drop handlers
+function isPointInShape(shape, x, y) {
+    if (shape.type === 'circle') {
+        const dist = Math.hypot(x - shape.x, y - shape.y);
+        return dist <= shape.r;
+    }
+    if (shape.type === 'rect') {
+        return x >= shape.x && x <= shape.x + shape.width && y >= shape.y && y <= shape.y + shape.height;
+    }
+    if (shape.type === 'triangle') {
+        const x1 = shape.x, y1 = shape.y;
+        const x2 = shape.x + shape.size, y2 = shape.y;
+        const x3 = shape.x + shape.size / 2, y3 = shape.y - shape.size;
+        function area(ax, ay, bx, by, cx, cy) {
+            return Math.abs((ax * (by - cy) + bx * (cy - ay) + cx * (ay - by)) / 2);
+        }
+        const A = area(x1, y1, x2, y2, x3, y3);
+        const A1 = area(x, y, x2, y2, x3, y3);
+        const A2 = area(x1, y1, x, y, x3, y3);
+        const A3 = area(x1, y1, x2, y2, x, y);
+        return Math.abs(A - (A1 + A2 + A3)) < 0.5;
+    }
+    return false;
+}
+
 canvas.addEventListener('mousedown', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    for (let i = shapes.length - 1; i >= 0; i--) { // Prioriza forma superior
+    for (let i = shapes.length - 1; i >= 0; i--) {
         const shape = shapes[i];
-        if (shape.type === 'circle') {
-            const dist = Math.sqrt((x - shape.x) ** 2 + (y - shape.y) ** 2);
-            if (dist <= shape.r) {
-                draggingShape = shape;
-                offsetX = x - shape.x;
-                offsetY = y - shape.y;
-                return;
-            }
-        } else if (shape.type === 'rect') {
-            if (
-                x >= shape.x &&
-                x <= shape.x + shape.width &&
-                y >= shape.y &&
-                y <= shape.y + shape.height
-            ) {
-                draggingShape = shape;
-                offsetX = x - shape.x;
-                offsetY = y - shape.y;
-                return;
-            }
-        } else if (shape.type === 'triangle') {
-            const x1 = shape.x, y1 = shape.y;
-            const x2 = shape.x + shape.size, y2 = shape.y;
-            const x3 = shape.x + shape.size / 2, y3 = shape.y - shape.size;
-            function area(x1, y1, x2, y2, x3, y3) {
-                return Math.abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
-            }
-            const A = area(x1, y1, x2, y2, x3, y3);
-            const A1 = area(x, y, x2, y2, x3, y3);
-            const A2 = area(x1, y1, x, y, x3, y3);
-            const A3 = area(x1, y1, x2, y2, x, y);
-            if (Math.abs(A - (A1 + A2 + A3)) < 0.5) {
-                draggingShape = shape;
-                // Para triângulo, calcula offset do ponto de arrasto para o vértice superior
-                offsetX = x - shape.x;
-                offsetY = y - shape.y;
-                return;
-            }
+        if (isPointInShape(shape, x, y)) {
+            draggingShape = shape;
+            offsetX = x - (shape.type === 'circle' ? shape.x : shape.x);
+            offsetY = y - (shape.type === 'circle' ? shape.y : shape.y);
+            return;
         }
     }
 });

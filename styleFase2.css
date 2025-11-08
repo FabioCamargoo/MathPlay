@@ -69,12 +69,15 @@ body {
 }
 
 .color-picker {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px; /* acima da borda inferior */
     display: flex;
     gap: 12px;
-    justify-content: center;
     align-items: center;
-    margin: 14px 0;
-    padding: 0 20px;
+    z-index: 1200; /* acima do canvas */
+    padding: 0 12px;
 }
 
 .color-btn {
@@ -147,6 +150,17 @@ html, body {
     width: 100%;
     height: 100%;
     display: block;
+}
+
+/* garantir 100% de tela para o canvas desta fase */
+#drawCanvas {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5; /* abaixo dos botões/controles */
+    pointer-events: auto;
 }
 
 /* caso não exista, adicione ou ajuste estas regras */

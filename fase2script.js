@@ -1,10 +1,13 @@
 function fitCanvasToViewport() {
     const canvas = document.getElementById('drawCanvas');
     if (!canvas) return;
-    // ajustar resolução do canvas para evitar distorção/blur
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    // se seu desenho depende de coordenadas fixas, ajuste shapes depois ou redesenhe
+    const cssW = window.innerWidth;
+    const cssH = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.round(cssW * dpr));
+    canvas.height = Math.max(1, Math.round(cssH * dpr));
+    // aplica tamanho visual via estilo (já definido no CSS como 100vw/100vh)
+    // re-render das formas após ajuste
     if (typeof drawShapes === 'function') drawShapes();
 }
 window.addEventListener('load', fitCanvasToViewport);
@@ -18,7 +21,7 @@ let brushColor = "#dddddd";
 const shapes = [
     { type: 'circle', x: 200, y: 200, r: 40, color: "#fff" },
     // substituído square por rect (retângulo em pé)
-    { type: 'rect', x: 400, y: 110, width: 80, height: 300, color: "#fff" },
+    { type: 'rect', x: 400, y: 180, width: 80, height: 300, color: "#fff" },
     { type: 'triangle', x: 700, y: 250, size: 85,  color: "#fff" }
 ];
 
